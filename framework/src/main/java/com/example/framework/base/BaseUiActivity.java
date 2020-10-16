@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.framework.utils.SystemUI;
 
-public class BaseUiActivity extends AppCompatActivity {
+public class BaseUiActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

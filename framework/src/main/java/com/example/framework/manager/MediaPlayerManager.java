@@ -9,134 +9,145 @@ import com.example.framework.utils.LogUtils;
 
 import java.io.IOException;
 
+
 public class MediaPlayerManager {
+
     public static final int MEDIA_STATUS_PLAY = 0;
     public static final int MEDIA_STATUS_PAUSE = 1;
     public static final int MEDIA_STATUS_STOP = 2;
 
-    public static int MEDIA_STATUS = MEDIA_STATUS_STOP;
+    public int MEDIA_STATUS = MEDIA_STATUS_STOP;
 
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mMediaPlayer;
+    private static final int H_PROGRESS = 1000;
 
     private OnMusicProgressListener musicProgressListener;
 
-    private static final int  H_PROGRESS = 1000;
 
-    private Handler handler = new Handler(new Handler.Callback() {
+    private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
+        public boolean handleMessage(Message message) {
+            switch (message.what) {
                 case H_PROGRESS:
-                        if(musicProgressListener != null){
-                            int current = getCurrentPosition();
-                            int pos = (int)(((float)current)/((float)getDuration())*100);
-                            musicProgressListener.onProgress(current,pos);
-                            handler.sendEmptyMessageDelayed(H_PROGRESS,1000);
-                        }
+                    if (musicProgressListener != null) {
+                        //拿到当前时长
+                        int currentPosition = getCurrentPosition();
+                        int pos = (int) (((float) currentPosition) / ((float) getDuration()) * 100);
+                        musicProgressListener.OnProgress(currentPosition, pos);
+                        mHandler.sendEmptyMessageDelayed(H_PROGRESS, 1000);
+                    }
                     break;
             }
-
             return false;
         }
     });
 
-
-    public  MediaPlayerManager(){
-        mediaPlayer = new MediaPlayer();
+    public MediaPlayerManager() {
+        mMediaPlayer = new MediaPlayer();
     }
 
-    public  void startplay(String path){
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            MEDIA_STATUS = MEDIA_STATUS_PLAY;
-            handler.sendEmptyMessage(H_PROGRESS);
-        } catch (IOException e) {
-            LogUtils.e(e.toString());
-            e.printStackTrace();
-        }
+
+    public boolean isPlaying() {
+        return mMediaPlayer.isPlaying();
     }
 
-    public  void startplay(AssetFileDescriptor path){
+
+    public void startPlay(AssetFileDescriptor path) {
         try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(path.getFileDescriptor(),
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(path.getFileDescriptor(),
                     path.getStartOffset(), path.getLength());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
             MEDIA_STATUS = MEDIA_STATUS_PLAY;
-            handler.sendEmptyMessage(H_PROGRESS);
+            mHandler.sendEmptyMessage(H_PROGRESS);
         } catch (IOException e) {
             LogUtils.e(e.toString());
             e.printStackTrace();
         }
     }
 
-    public boolean isPlaying(){
-        return mediaPlayer.isPlaying();
+
+    public void startPlay(String path) {
+        try {
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(path);
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
+            MEDIA_STATUS = MEDIA_STATUS_PLAY;
+            mHandler.sendEmptyMessage(H_PROGRESS);
+        } catch (IOException e) {
+            LogUtils.e(e.toString());
+            e.printStackTrace();
+        }
     }
 
-    public void pauseplay(){
 
-        if(isPlaying()){
-            mediaPlayer.pause();
+    public void pausePlay() {
+        if (isPlaying()) {
+            mMediaPlayer.pause();
             MEDIA_STATUS = MEDIA_STATUS_PAUSE;
             removeHandler();
         }
-
     }
 
-    public void continueplay(){
-        mediaPlayer.start();
+
+    public void continuePlay() {
+        mMediaPlayer.start();
         MEDIA_STATUS = MEDIA_STATUS_PLAY;
-        handler.sendEmptyMessage(H_PROGRESS);
-
+        mHandler.sendEmptyMessage(H_PROGRESS);
     }
 
 
-    public void stopplay(){
-        mediaPlayer.stop();
+    public void stopPlay() {
+        mMediaPlayer.stop();
         MEDIA_STATUS = MEDIA_STATUS_STOP;
         removeHandler();
     }
 
-    public int getCurrentPosition(){
-        return mediaPlayer.getCurrentPosition();
-    }
 
-    public int getDuration(){
-        return mediaPlayer.getDuration();
-    }
-
-    public void setOnComplteionListener(MediaPlayer.OnCompletionListener listener){
-        mediaPlayer.setOnCompletionListener(listener);
-    }
-    public void setOnErrorListener(MediaPlayer.OnErrorListener listener){
-        mediaPlayer.setOnErrorListener(listener);
-    }
-    public void setOnProgressListener(OnMusicProgressListener listener){
-        musicProgressListener = listener;
-    }
-
-    public void isL(boolean isLooping){
-        mediaPlayer.setLooping(isLooping);
-    }
-
-    public void seekto(int ms){
-        mediaPlayer.seekTo(ms);
+    public int getCurrentPosition() {
+        return mMediaPlayer.getCurrentPosition();
     }
 
 
-    public interface  OnMusicProgressListener{
-        void onProgress(int progress,int pos);
+    public int getDuration() {
+        return mMediaPlayer.getDuration();
     }
+
+
+    public void setLooping(boolean isLooping) {
+        mMediaPlayer.setLooping(isLooping);
+    }
+
+
+    public void seekTo(int ms) {
+        mMediaPlayer.seekTo(ms);
+    }
+
 
     public void removeHandler() {
-        if (handler != null) {
-            handler.removeMessages(H_PROGRESS);
+        if (mHandler != null) {
+            mHandler.removeMessages(H_PROGRESS);
         }
     }
 
+
+
+    public void setOnComplteionListener(MediaPlayer.OnCompletionListener listener) {
+        mMediaPlayer.setOnCompletionListener(listener);
+    }
+
+
+    public void setOnErrorListener(MediaPlayer.OnErrorListener listener) {
+        mMediaPlayer.setOnErrorListener(listener);
+    }
+
+    public void setOnProgressListener(OnMusicProgressListener listener) {
+        musicProgressListener = listener;
+    }
+
+    public interface OnMusicProgressListener {
+        void OnProgress(int progress, int pos);
+    }
 }

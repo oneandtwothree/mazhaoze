@@ -16,7 +16,7 @@
         android:name=".base.BaseApp"
         tools:ignore="GoodleAppIndexingWarning">
 
-        <activity android:name=".Activity.IndexActivity"
+        <activity android:name=".test.TestActivity"
             android:theme="@style/AppThemeFull">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activity.GuideActivity"/>
+       <meta-data android:name="android.max_aspect" android:value="ratio_float"/>
+
+
+        <activity android:name=".Activity.IndexActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".Activity.LoginActivity"/>
+        <activity android:name=".Activity.GuideActivity"/>
 
     </application>
 
