@@ -1,0 +1,11 @@
+ext{
+    android = [
+            compileSdkVersion:30,
+            buildToolsVersion:"30.0.1",
+            applicationId:"com.example.liaoapp",
+            minSdkVersion:22,
+            targetSdkVersion:30,
+            versionCode:1,
+            versionName:"1.0"
+    ]
+}
