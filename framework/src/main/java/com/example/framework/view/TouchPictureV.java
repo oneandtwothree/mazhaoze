@@ -116,6 +116,7 @@ public class TouchPictureV extends View {
                     if(onviewResultListener != null){
                         onviewResultListener.onResult();
                         moveX = 200;
+                        invalidate();
                     }
                 }
                 break;

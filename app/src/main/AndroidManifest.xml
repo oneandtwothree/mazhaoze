@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.liaoapp">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -16,7 +14,7 @@
         android:name=".base.BaseApp"
         tools:ignore="GoodleAppIndexingWarning">
 
-        <activity android:name=".test.TestActivity"
+        <activity android:name=".Activity.GuideActivity"
             android:theme="@style/AppThemeFull">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,13 +23,19 @@
             </intent-filter>
         </activity>
 
-       <meta-data android:name="android.max_aspect" android:value="ratio_float"/>
-
-
         <activity android:name=".Activity.IndexActivity"/>
         <activity android:name=".MainActivity"/>
-        <activity android:name=".Activity.LoginActivity"/>
-        <activity android:name=".Activity.GuideActivity"/>
+        <activity android:name=".Activity.LoginActivity"
+            android:theme="@style/AppThemeFull"/>
+        <activity android:name=".test.TestActivity"/>
+
+        <meta-data android:name="android.max_aspect" android:value="ratio_float"/>
+
+
+        <provider
+            android:name="cn.bmob.v3.util.BmobContentProvider"
+            android:authorities="com.example.liaoapp.BmobContentProvider">
+        </provider>
 
     </application>
 

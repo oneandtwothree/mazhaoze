@@ -4,10 +4,28 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <com.example.framework.view.TouchPictureV
-        android:id="@+id/TouchV"
-        android:layout_width="match_parent"
-        android:layout_height="250dp" />
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/zeng"
+       android:text="增"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shan"
+        android:text="删"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gai"
+        android:text="改"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cha"
+        android:text="查"/>
 
 </LinearLayout>
