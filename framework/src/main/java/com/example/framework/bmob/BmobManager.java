@@ -43,5 +43,9 @@ public class BmobManager {
         return BmobUser.getCurrentUser(IMUser.class);
     }
 
+    public boolean  islogin(){
+        return BmobUser.isLogin();
+    }
+
 
 }

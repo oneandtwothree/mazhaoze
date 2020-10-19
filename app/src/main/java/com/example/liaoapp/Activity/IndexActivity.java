@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.framework.bmob.BmobManager;
 import com.example.framework.entity.Constants;
 import com.example.framework.utils.SpUtils;
 import com.example.liaoapp.MainActivity;
@@ -42,7 +43,13 @@ public class IndexActivity extends AppCompatActivity {
         }else {
             String getstring = SpUtils.getInstance().getstring(Constants.SP_TOKEN, "");
             if(TextUtils.isEmpty(getstring)){
-                intent.setClass(this, LoginActivity.class);
+                if (BmobManager.getInstance().islogin()) {
+                    //跳转到主页
+                    intent.setClass(this, MainActivity.class);
+                } else {
+                    //跳转到登录页
+                    intent.setClass(this, LoginActivity.class);
+                }
             }else {
                 intent.setClass(this, MainActivity.class);
             }

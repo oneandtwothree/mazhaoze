@@ -22,6 +22,7 @@ import com.example.framework.bmob.IMUser;
 import com.example.framework.entity.Constants;
 import com.example.framework.utils.SpUtils;
 import com.example.framework.view.DiaLogView;
+import com.example.framework.view.LodingView;
 import com.example.framework.view.TouchPictureV;
 import com.example.liaoapp.MainActivity;
 import com.example.liaoapp.R;
@@ -43,6 +44,8 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
     private static int time = 60;
 
     private TouchPictureV mPictureV;
+
+    private LodingView lodingView;
 
     private   DiaLogView initview;
     private Handler handler = new Handler(new Handler.Callback() {
@@ -71,7 +74,7 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
         setContentView(R.layout.activity_login);
 
 
-
+        lodingView = new LodingView(this);
 
         etPhone = findViewById(R.id.et_phone);
         etCode = findViewById(R.id.et_code);
@@ -113,15 +116,22 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
             Toast.makeText(this, R.string.text_login_phone_null, Toast.LENGTH_SHORT).show();
         }
 
+        lodingView.show("正在登录......");
+
         BmobManager.getInstance().signorLoginByMyPhone(phone, code, new LogInListener<IMUser>() {
             @Override
             public void done(IMUser imUser, BmobException e) {
                 if(e == null){
+                    lodingView.hide();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     SpUtils.getInstance().putstring(Constants.SP_PHONE,phone);
                     finish();
                 }else {
-                    Toast.makeText(LoginActivity.this, "ERROR:"+e.toString(), Toast.LENGTH_SHORT).show();
+                    if (e.getErrorCode() == 207) {
+                        Toast.makeText(LoginActivity.this, getString(R.string.text_login_code_error), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "ERROR:" + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -131,6 +141,7 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
         String phone = etPhone.getText().toString().trim();
         if(TextUtils.isEmpty(phone)){
             Toast.makeText(this, R.string.text_login_phone_null, Toast.LENGTH_SHORT).show();
+            return;
         }
         BmobManager.getInstance().requestSMScode(phone, new QueryListener<Integer>() {
             @Override
