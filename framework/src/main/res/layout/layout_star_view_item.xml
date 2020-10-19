@@ -12,9 +12,10 @@
         android:textColor="@android:color/white"
         android:textSize="5sp" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/iv_star_icon"
         android:layout_width="10dp"
-        android:layout_height="10dp" />
+        android:layout_height="10dp"
+        android:src="@drawable/img_bg"/>
 
 </LinearLayout>
