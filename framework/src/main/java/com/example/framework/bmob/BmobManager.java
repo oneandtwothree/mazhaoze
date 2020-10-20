@@ -2,15 +2,21 @@ package com.example.framework.bmob;
 
 import android.content.Context;
 
+import java.io.File;
+
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 public class BmobManager {
     private volatile static BmobManager bmobManager;
-
+    //使用这个key，可提交到网络服务器上f8efae5debf319071b44339cf51153fc
     private static final String BMOB_KEY = "ac6c474d8d8fffa22ca52bc91f2b590d";
 
     private BmobManager() {
@@ -39,6 +45,37 @@ public class BmobManager {
         BmobUser.signOrLoginByMobilePhone(phone,code,logInListener);
     }
 
+    public void uploadFirstPhoto(final String name, File file, final Onupload onupload){
+        final IMUser user = getUser();
+        final BmobFile bmobFile = new BmobFile(file);
+        bmobFile.uploadblock(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if(e == null){
+                    user.setNickName(name);
+                    user.setPhoto(bmobFile.getFileUrl());
+
+                    user.setTokenNickName(name);
+                    user.setTokenPhoto(bmobFile.getFileUrl());
+
+
+                    user.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if(e == null){
+                                onupload.OnUpDone();
+                            }else {
+                                onupload.OnUpFail(e);
+                            }
+                        }
+                    });
+                }else {
+                    onupload.OnUpFail(e);
+                }
+            }
+        });
+    }
+
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);
     }
@@ -47,5 +84,8 @@ public class BmobManager {
         return BmobUser.isLogin();
     }
 
-
+    public interface Onupload{
+        void OnUpDone();
+        void OnUpFail(BmobException e);
+    }
 }

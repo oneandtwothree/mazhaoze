@@ -8,24 +8,31 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.framework.base.BaseActivity;
 import com.example.framework.base.BaseBackActivity;
+import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.DiaLogManager;
 import com.example.framework.helper.FileHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.view.DiaLogView;
+import com.example.framework.view.LodingView;
 import com.example.liaoapp.R;
 
 import java.io.File;
+
+import cn.bmob.v3.exception.BmobException;
 
 public class FirstUploadActivity extends BaseBackActivity implements View.OnClickListener {
     private ImageView ivPhoto;
@@ -39,6 +46,8 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
     private DiaLogView seltphoto;
     private File uploadfile = null;
 
+    private LodingView lodingView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +57,37 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
     }
 
     private void initview() {
+        lodingView = new LodingView(this);
+        lodingView.setLodingText("正在上传头像...");
         ivPhoto = findViewById(R.id.iv_photo);
         etNickname = findViewById(R.id.et_nickname);
         btnUpload = findViewById(R.id.btn_upload);
 
         ivPhoto.setOnClickListener(this);
         btnUpload.setOnClickListener(this);
+
+        btnUpload.setEnabled(false);
+
+        etNickname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() > 0){
+                        btnUpload.setEnabled(uploadfile != null);
+                }else {
+                    btnUpload.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         initPhotoView();
 
@@ -72,6 +106,7 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
                 DiaLogManager.getInstance().show(seltphoto);
                 break;
             case R.id.btn_upload:
+                uploadPhoto();
                 break;
             case R.id.btn_camera:
                 DiaLogManager.getInstance().hide(seltphoto);
@@ -85,6 +120,28 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
                 DiaLogManager.getInstance().hide(seltphoto);
                 break;
         }
+    }
+
+    private void uploadPhoto() {
+        lodingView.show();
+        String trim = etNickname.getText().toString().trim();
+        BmobManager.getInstance().uploadFirstPhoto(trim, uploadfile, new BmobManager.Onupload() {
+            @Override
+            public void OnUpDone() {
+                lodingView.hide();
+                Toast.makeText(FirstUploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                FirstUploadActivity.this.finish();
+                setResult(RESULT_OK);
+
+            }
+
+            @Override
+            public void OnUpFail(BmobException e) {
+                lodingView.hide();
+                Toast.makeText(FirstUploadActivity.this, ""+e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
@@ -126,6 +183,11 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
         if(uploadfile != null){
             Bitmap bitmap = BitmapFactory.decodeFile(uploadfile.getPath());
             ivPhoto.setImageBitmap(bitmap);
+
+
+            String trim = etNickname.getText().toString().trim();
+            btnUpload.setEnabled(!TextUtils.isEmpty(trim));
+
         }
 
         super.onActivityResult(requestCode, resultCode, data);
