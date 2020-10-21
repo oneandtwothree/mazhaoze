@@ -48,6 +48,7 @@
             android:label="头像上传/资料填写" />
         <activity android:name=".Activity.AddFriendActivity"
             />
+        <activity android:name=".Activity.ContactFriendActivity"/>
 
 
         <service android:name=".service.CloudService" />

@@ -12,6 +12,10 @@ public class AddFriendModel {
     private String name;
     private String  desc;
 
+    private boolean isContact = false;
+    private String Cotactname;
+    private String CotactPhone;
+
 
     public int getType() {
         return type;
@@ -75,5 +79,30 @@ public class AddFriendModel {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+
+    public boolean isContact() {
+        return isContact;
+    }
+
+    public void setContact(boolean contact) {
+        isContact = contact;
+    }
+
+    public String getCotactname() {
+        return Cotactname;
+    }
+
+    public void setCotactname(String cotactname) {
+        Cotactname = cotactname;
+    }
+
+    public String getCotactPhone() {
+        return CotactPhone;
+    }
+
+    public void setCotactPhone(String cotactPhone) {
+        CotactPhone = cotactPhone;
     }
 }

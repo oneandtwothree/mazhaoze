@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.framework.entity.Constants;
 import com.example.framework.utils.GlideHelper;
+import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.R;
 import com.example.liaoapp.model.AddFriendModel;
 
@@ -63,6 +65,12 @@ public class AddFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ContentViewHolder)holder).tvNickname.setText(addFriendModel.getName());
             ((ContentViewHolder)holder).tvAge.setText(addFriendModel.getAge()+"岁");
             ((ContentViewHolder)holder).tvDesc.setText(addFriendModel.getDesc());
+
+            if(addFriendModel.isContact()){
+                ((ContentViewHolder)holder).llContactInfo.setVisibility(View.VISIBLE);
+                ((ContentViewHolder)holder).tvContactName.setText(addFriendModel.getCotactname());
+                ((ContentViewHolder)holder).tvContactPhone.setText(addFriendModel.getCotactPhone());
+            }
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +111,10 @@ public class AddFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView tvAge;
         private TextView tvDesc;
 
+        private LinearLayout llContactInfo;
+        private TextView tvContactName;
+        private TextView tvContactPhone;
+
 
 
         public ContentViewHolder(@NonNull View itemView) {
@@ -112,6 +124,11 @@ public class AddFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvNickname = itemView.findViewById(R.id.tv_nickname);
             tvAge = itemView.findViewById(R.id.tv_age);
             tvDesc = itemView.findViewById(R.id.tv_desc);
+
+            llContactInfo = itemView.findViewById(R.id.ll_contact_info);
+            tvContactName = itemView.findViewById(R.id.tv_contact_name);
+            tvContactPhone = itemView.findViewById(R.id.tv_contact_phone);
+
         }
     }
 

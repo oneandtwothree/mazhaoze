@@ -1,5 +1,7 @@
 package com.example.liaoapp.Activity;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -76,10 +78,14 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ll_to_contact:
+                    if(checkPermissions(Manifest.permission.READ_CONTACTS)){
+                        startActivity(new Intent(this,ContactFriendActivity.class));
+                    }else {
+                        requestPermission(new String[]{Manifest.permission.READ_CONTACTS});
+                    }
                 break;
             case R.id.iv_search:
                 queryPhoneFriend();
-
                 break;
         }
     }
