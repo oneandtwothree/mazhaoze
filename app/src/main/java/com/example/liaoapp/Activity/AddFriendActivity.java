@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.framework.adapter.CommonAdapter;
+import com.example.framework.adapter.CommonViewHolder;
 import com.example.framework.base.BaseBackActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.utils.CommonUtils;
+import com.example.framework.utils.GlideHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.R;
 import com.example.liaoapp.adapter.AddFriendAdapter;
@@ -31,6 +34,10 @@ import cn.bmob.v3.listener.FindListener;
 
 public class AddFriendActivity extends BaseBackActivity implements View.OnClickListener {
 
+    public static final int TYPE_TITLE = 0;
+    public static final int TYPE_CONTENT = 1;
+
+
     private LinearLayout llToContact;
     private EditText etPhone;
     private ImageView ivSearch;
@@ -38,7 +45,7 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
     private RecyclerView mSearchResultView;
     private View include_emptu;
 
-    private AddFriendAdapter addFriendAdapter;
+    private CommonAdapter<AddFriendModel> addFriendAdapter;
     private List<AddFriendModel> mlist = new ArrayList<>();
 
     @Override
@@ -62,15 +69,43 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
         mSearchResultView.setLayoutManager(new LinearLayoutManager(this));
         mSearchResultView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
-        addFriendAdapter = new AddFriendAdapter(this,mlist);
-        mSearchResultView.setAdapter(addFriendAdapter);
-
-        addFriendAdapter.setOnClickListener(new AddFriendAdapter.onClickListener() {
+        addFriendAdapter = new CommonAdapter<>(mlist, new CommonAdapter.OnMoreBindDataListener<AddFriendModel>() {
             @Override
-            public void Onclick(int position) {
-                Toast.makeText(AddFriendActivity.this, "position:"+position, Toast.LENGTH_SHORT).show();
+            public int getItemType(int position) {
+                return mlist.get(position).getType();
+            }
+
+            @Override
+            public void onBindViewHolder(AddFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
+                if(model.getType() == TYPE_TITLE){
+                 commonViewHolder.setText(R.id.tv_title,model.getTitle());
+                }else if(model.getType() == TYPE_CONTENT) {
+                    //设置头像
+                    commonViewHolder.setImgurl(AddFriendActivity.this, R.id.iv_photo, model.getPhoto());
+                    //设置性别
+                    commonViewHolder.setImgsex(R.id.iv_sex,
+                            model.isSex() ? R.drawable.img_boy_icon : R.drawable.img_girl_icon);
+                    //设置昵称
+                    commonViewHolder.setText(R.id.tv_nickname, model.getName());
+                    //年龄
+                    commonViewHolder.setText(R.id.tv_age, model.getAge() + getString(R.string.text_search_age));
+                    //设置描述
+                    commonViewHolder.setText(R.id.tv_desc, model.getDesc());
+                }
+            }
+
+            @Override
+            public int getLayoutId(int type) {
+                if(type == TYPE_TITLE){
+                    return R.layout.layout_search_title_item;
+                }else if(type == TYPE_CONTENT){
+                    return R.layout.layout_search_user_item;
+                }
+                return 0;
             }
         });
+        mSearchResultView.setAdapter(addFriendAdapter);
+
 
     }
 
@@ -158,14 +193,14 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
 
     private void addTitle(String tit){
         AddFriendModel addFriendModel = new AddFriendModel();
-        addFriendModel.setType(AddFriendAdapter.TYPE_TITLE);
+        addFriendModel.setType(TYPE_TITLE);
         addFriendModel.setTitle(tit);
         mlist.add(addFriendModel);
 
     }
     private void addcontext(IMUser imUser){
         AddFriendModel addFriendModel = new AddFriendModel();
-        addFriendModel.setType(AddFriendAdapter.TYPE_CONTENT);
+        addFriendModel.setType(TYPE_CONTENT);
         addFriendModel.setName(imUser.getNickName());
         addFriendModel.setUserid(imUser.getObjectId());
         addFriendModel.setSex(imUser.isSex());
