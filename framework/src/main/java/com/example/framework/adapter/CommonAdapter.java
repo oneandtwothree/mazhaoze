@@ -33,6 +33,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<CommonViewHolder> {
         int getItemType(int position);
     }
 
+
     @Override
     public int getItemViewType(int position) {
         if(onMoreBindDataListener != null){
