@@ -46,6 +46,8 @@
         <activity
             android:name=".Activity.FirstUploadActivity"
             android:label="头像上传/资料填写" />
+        <activity android:name=".Activity.AddFriendActivity"
+            />
 
 
         <service android:name=".service.CloudService" />

@@ -61,4 +61,7 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.5'
     api 'cn.bmob.android:bmob-sdk:3.7.8'
     api 'com.moxun:tagcloudlib:1.2.0'
+    api 'com.github.bumptech.glide:glide:4.9.0'
+//图片文件选择器
+    api 'com.github.wildma:PictureSelector:2.0.0'
 }

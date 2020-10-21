@@ -1,5 +1,6 @@
 package com.example.liaoapp.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,14 @@ import androidx.annotation.Nullable;
 
 import com.example.framework.adapter.CloudTagAdapter;
 import com.example.framework.base.BaseFragment;
+import com.example.liaoapp.Activity.AddFriendActivity;
 import com.example.liaoapp.R;
 import com.moxun.tagcloudlib.view.TagCloudView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StarFragment extends BaseFragment {
+public class StarFragment extends BaseFragment implements View.OnClickListener{
     private View view;
 
     private TextView tvStarTitle;
@@ -63,9 +65,16 @@ public class StarFragment extends BaseFragment {
         llLove = view.findViewById(R.id.ll_love);
         tvLove = view.findViewById(R.id.tv_love);
 
-        for (int i = 0; i < 50 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             mlist.add("Star" + i);
         }
+
+        ivCamera.setOnClickListener(this);
+        ivAdd.setOnClickListener(this);
+        llRandom.setOnClickListener(this);
+        llSoul.setOnClickListener(this);
+        llFate.setOnClickListener(this);
+        llLove.setOnClickListener(this);
 
 
         cloudTagAdapter = new CloudTagAdapter(getActivity(),mlist);
@@ -77,5 +86,24 @@ public class StarFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "position:"+parent, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_camera:
+                break;
+            case R.id.iv_add:
+                startActivity(new Intent(getActivity(), AddFriendActivity.class));
+                break;
+            case R.id.ll_random:
+                break;
+            case R.id.ll_soul:
+                break;
+            case R.id.ll_fate:
+                break;
+            case R.id.ll_love:
+                break;
+        }
     }
 }

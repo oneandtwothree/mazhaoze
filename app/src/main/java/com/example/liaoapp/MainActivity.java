@@ -21,6 +21,7 @@ import com.example.framework.base.BaseUiActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.DiaLogManager;
 import com.example.framework.entity.Constants;
+import com.example.framework.java.SimulationData;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 import com.example.framework.view.DiaLogView;
@@ -111,6 +112,8 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
         CheckMainTab(0);
 
         checkToken();
+
+        //SimulationData.testData();
     }
 
     private void checkToken() {

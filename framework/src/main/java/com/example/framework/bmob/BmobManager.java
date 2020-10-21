@@ -5,10 +5,12 @@ import android.content.Context;
 import java.io.File;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -75,6 +77,21 @@ public class BmobManager {
             }
         });
     }
+
+    public void queryFriend(String phone, FindListener<IMUser> listener){
+       basequery("mobilePhoneNumber",phone,listener);
+    }
+    public void queryAll(FindListener<IMUser> listener){
+        BmobQuery<IMUser> objectBmobQuery = new BmobQuery<>();
+        objectBmobQuery.findObjects(listener);
+    }
+
+    public void basequery(String key,String value,FindListener<IMUser> listener){
+        BmobQuery<IMUser> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo(key,value);
+        bmobQuery.findObjects(listener);
+    }
+
 
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);
