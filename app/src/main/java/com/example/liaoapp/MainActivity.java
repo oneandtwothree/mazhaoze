@@ -155,7 +155,7 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
 
     private void createUploadDialog() {
-        DiaLogManager.getInstance().initview(this, R.layout.dialog_first_upload);
+        mUploadView =  DiaLogManager.getInstance().initview(this, R.layout.dialog_first_upload);
         mUploadView.setCancelable(false);
         ivGoUpload = mUploadView.findViewById(R.id.iv_go_upload);
         ivGoUpload.setOnClickListener(new View.OnClickListener() {
