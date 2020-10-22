@@ -79,6 +79,7 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
     public static final int UPLOAD_REQUEST_CODE = 1002;
 
     private Disposable subscribe;
+    private DiaLogView mUploadView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +133,9 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
     private void checkToken() {
         String token = SpUtils.getInstance().getstring(Constants.SP_TOKEN, "");
+        if (mUploadView != null) {
+            DiaLogManager.getInstance().hide(mUploadView);
+        }
         if(!TextUtils.isEmpty(token)){
             startCloudService();
         }else {
@@ -151,7 +155,7 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
 
     private void createUploadDialog() {
-        final DiaLogView mUploadView = DiaLogManager.getInstance().initview(this, R.layout.dialog_first_upload);
+        DiaLogManager.getInstance().initview(this, R.layout.dialog_first_upload);
         mUploadView.setCancelable(false);
         ivGoUpload = mUploadView.findViewById(R.id.iv_go_upload);
         ivGoUpload.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +172,6 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
     }
 
     private void createToken() {
-        LogUtils.e("createToken");
-
         final HashMap<String,String> map = new HashMap<>();
         map.put("userId",BmobManager.getInstance().getUser().getObjectId());
         map.put("name",BmobManager.getInstance().getUser().getNickName());
@@ -183,7 +185,7 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
                 emitter.onNext(s);
                 emitter.onComplete();
             }
-        }).subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
                     @Override
@@ -362,8 +364,10 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(subscribe.isDisposed()){
-            subscribe.dispose();
+        if (subscribe != null) {
+            if (!subscribe.isDisposed()) {
+                subscribe.dispose();
+            }
         }
     }
 }
