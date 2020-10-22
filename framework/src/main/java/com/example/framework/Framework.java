@@ -3,6 +3,7 @@ package com.example.framework;
 import android.content.Context;
 
 import com.example.framework.bmob.BmobManager;
+import com.example.framework.cloud.CloudManager;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 
@@ -27,5 +28,6 @@ public class Framework {
         LogUtils.i("initFramework");
         SpUtils.getInstance().initSp(mContext);
         BmobManager.getInstance().initbmob(mContext);
+        CloudManager.getInstance().initCloud(mContext);
     }
 }

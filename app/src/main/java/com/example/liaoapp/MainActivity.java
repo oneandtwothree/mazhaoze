@@ -21,7 +21,9 @@ import com.example.framework.base.BaseUiActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.DiaLogManager;
 import com.example.framework.entity.Constants;
+import com.example.framework.gson.TokenBean;
 import com.example.framework.java.SimulationData;
+import com.example.framework.manager.HttpManager;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 import com.example.framework.view.DiaLogView;
@@ -31,8 +33,18 @@ import com.example.liaoapp.Fragment.MeFragment;
 import com.example.liaoapp.Fragment.SquareFragment;
 import com.example.liaoapp.Fragment.StarFragment;
 import com.example.liaoapp.service.CloudService;
+import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseUiActivity implements View.OnClickListener {
 
@@ -65,6 +77,8 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
     private ImageView ivGoUpload;
     public static final int UPLOAD_REQUEST_CODE = 1002;
+
+    private Disposable subscribe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,9 +132,8 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
     private void checkToken() {
         String token = SpUtils.getInstance().getstring(Constants.SP_TOKEN, "");
-
         if(!TextUtils.isEmpty(token)){
-            startService(new Intent(this, CloudService.class));
+            startCloudService();
         }else {
             String tokenPhoto = BmobManager.getInstance().getUser().getTokenPhoto();
             String tokenNickName = BmobManager.getInstance().getUser().getTokenNickName();
@@ -131,6 +144,11 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
             }
         }
     }
+
+    private void startCloudService(){
+        startService(new Intent(this, CloudService.class));
+    }
+
 
     private void createUploadDialog() {
         final DiaLogView mUploadView = DiaLogManager.getInstance().initview(this, R.layout.dialog_first_upload);
@@ -151,6 +169,38 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
 
     private void createToken() {
         LogUtils.e("createToken");
+
+        final HashMap<String,String> map = new HashMap<>();
+        map.put("userId",BmobManager.getInstance().getUser().getObjectId());
+        map.put("name",BmobManager.getInstance().getUser().getNickName());
+        map.put("portraitUri",BmobManager.getInstance().getUser().getTokenPhoto());
+
+
+        subscribe = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                String s = HttpManager.getInstance().postCloudToken(map);
+                emitter.onNext(s);
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String o) throws Exception {
+                        paringCloudToken(o);
+                    }
+                });
+    }
+
+    private void paringCloudToken(String o) {
+        TokenBean tokenBean = new Gson().fromJson(o, TokenBean.class);
+        if(tokenBean.getCode() == 200){
+            if(!TextUtils.isEmpty(tokenBean.getToken())){
+                SpUtils.getInstance().putstring(Constants.SP_TOKEN,tokenBean.getToken());
+                startCloudService();
+            }
+        }
     }
 
     private void initfragment() {
@@ -307,5 +357,13 @@ public class MainActivity extends BaseUiActivity implements View.OnClickListener
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(subscribe.isDisposed()){
+            subscribe.dispose();
+        }
     }
 }

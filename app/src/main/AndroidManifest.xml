@@ -69,7 +69,13 @@
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.example.liaoapp.BmobContentProvider"></provider>
 
+        <receiver android:name=".receiver.SealNotificationReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="io.rong.push.intent.MESSAGE_ARRIVED"/>
+                <action android:name="io.rong.push.intent.MESSAGE_CLICKED"/>
+                <action android:name="io.rong.push.intent.THIRD_PARTY_PUSH_STATE"/>
+            </intent-filter>
+        </receiver>
 
     </application>
-
 </manifest>

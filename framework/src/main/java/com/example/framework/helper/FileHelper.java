@@ -23,7 +23,7 @@ public class FileHelper {
     public static final int CAMEAR_REQUEST_CODE = 1004;
     public static final int ALBUM_REQUEST_CODE = 1005;
 
-    private static volatile FileHelper fileHelper;
+    private static volatile FileHelper fileHelper = null;
 
     private SimpleDateFormat simpleDateFormat;
     private File tempfile = null;
