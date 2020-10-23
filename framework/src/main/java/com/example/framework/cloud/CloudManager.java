@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.framework.R;
 import com.example.framework.utils.LogUtils;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
@@ -25,7 +28,9 @@ public class CloudManager {
     public static final String MSG_LOCATION_NAME = "RC:LBSMsg";
 
 
-
+    public static final String TYPE_TEXT = "TYPE_TEXT";
+    public static final String TYPE_ADD_FRIEND = "TYPE_ADD_FRIEND";
+    public static final String TYPE_ARGEED_FRIEND = "TYPE_ARGEED_FRIEND";
 
     public CloudManager() {
     }
@@ -50,7 +55,6 @@ public class CloudManager {
            @Override
            public void onSuccess(String s) {
                 LogUtils.e("连接成功"+s);
-               CloudManager.getInstance().sendTextMessage("很高兴见到你","96dd8823d7");
            }
 
            @Override
@@ -103,6 +107,17 @@ public class CloudManager {
         TextMessage obtain = TextMessage.obtain(msg);
 
         RongIMClient.getInstance().sendMessage(Conversation.ConversationType.PRIVATE, id, obtain, null, null,iSendMessageCallback);
+    }
+
+    public void sendaddfriendTextMessage(String msg,String type,String id){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg",msg);
+            jsonObject.put("type",type);
+            sendTextMessage(jsonObject.toString(),id);
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
 }

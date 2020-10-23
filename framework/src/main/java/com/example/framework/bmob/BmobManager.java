@@ -78,13 +78,24 @@ public class BmobManager {
         });
     }
 
-    public void queryFriend(String phone, FindListener<IMUser> listener){
+    public void queryPhoneFriend(String phone, FindListener<IMUser> listener){
        basequery("mobilePhoneNumber",phone,listener);
     }
+    public void queryidFriend(String id, FindListener<IMUser> listener){
+       basequery("objectId",id,listener);
+    }
+
+    public void queryallFriend(FindListener<Friend> listener){
+        BmobQuery<Friend> objectBmobQuery = new BmobQuery<>();
+        objectBmobQuery.addWhereEqualTo("user",getUser());
+        objectBmobQuery.findObjects(listener);
+    }
+
     public void queryAll(FindListener<IMUser> listener){
         BmobQuery<IMUser> objectBmobQuery = new BmobQuery<>();
         objectBmobQuery.findObjects(listener);
     }
+
 
     public void basequery(String key,String value,FindListener<IMUser> listener){
         BmobQuery<IMUser> bmobQuery = new BmobQuery<>();

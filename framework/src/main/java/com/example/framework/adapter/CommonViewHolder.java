@@ -54,4 +54,10 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         view.setImageResource(resid);
         return this;
     }
+
+    public CommonViewHolder setBackGroundColor(int viewid, int resid){
+        ImageView view = getView(viewid);
+        view.setBackgroundColor(resid);
+        return this;
+    }
 }

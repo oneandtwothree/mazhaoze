@@ -76,7 +76,7 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
             }
 
             @Override
-            public void onBindViewHolder(AddFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
+            public void onBindViewHolder(final AddFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
                 if(model.getType() == TYPE_TITLE){
                  commonViewHolder.setText(R.id.tv_title,model.getTitle());
                 }else if(model.getType() == TYPE_CONTENT) {
@@ -91,6 +91,13 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
                     commonViewHolder.setText(R.id.tv_age, model.getAge() + getString(R.string.text_search_age));
                     //设置描述
                     commonViewHolder.setText(R.id.tv_desc, model.getDesc());
+
+                    commonViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserInfoActivity.startActivity(AddFriendActivity.this,model.getUserid());
+                        }
+                    });
                 }
             }
 
@@ -143,11 +150,11 @@ public class AddFriendActivity extends BaseBackActivity implements View.OnClickL
         }
 
 
-        BmobManager.getInstance().queryFriend(phone, new FindListener<IMUser>() {
+        BmobManager.getInstance().queryPhoneFriend(phone, new FindListener<IMUser>() {
             @Override
             public void done(List<IMUser> list, BmobException e) {
                 if(e != null){
-                    return;
+                     return;
                 }
                 if(CommonUtils.isEmpty(list)){
                    IMUser imUser = list.get(0);
