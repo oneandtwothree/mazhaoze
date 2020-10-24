@@ -51,6 +51,10 @@
         <activity android:name=".Activity.ContactFriendActivity"/>
         <activity android:name=".Activity.UserInfoActivity"
             android:theme="@style/AppThemeFull" />
+        <activity android:name=".Activity.NewFriendActivity"
+            android:label="新朋友"
+            />
+
 
         <service android:name=".service.CloudService" />
 

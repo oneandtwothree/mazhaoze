@@ -108,7 +108,17 @@ public class CloudManager {
 
         RongIMClient.getInstance().sendMessage(Conversation.ConversationType.PRIVATE, id, obtain, null, null,iSendMessageCallback);
     }
-
+    public void sendTextMessage(String msg, String type, String targetId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", msg);
+            //如果没有这个Type 就是一条普通消息
+            jsonObject.put("type", type);
+            sendTextMessage(jsonObject.toString(), targetId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void sendaddfriendTextMessage(String msg,String type,String id){
         JSONObject jsonObject = new JSONObject();
         try {

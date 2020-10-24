@@ -13,6 +13,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -103,6 +104,12 @@ public class BmobManager {
         bmobQuery.findObjects(listener);
     }
 
+    public void addFriend(IMUser imUser, SaveListener<String> listener) {
+        Friend friend = new Friend();
+        friend.setUser(getUser());
+        friend.setFrienduser(imUser);
+        friend.save(listener);
+    }
 
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);
