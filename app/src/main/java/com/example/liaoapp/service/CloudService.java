@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.example.framework.cloud.CloudManager;
+import com.example.framework.db.LitePalHelper;
 import com.example.framework.entity.Constants;
 import com.example.framework.gson.TextBean;
 import com.example.framework.utils.LogUtils;
@@ -49,6 +50,10 @@ public class CloudService extends Service {
 
                     }else if(textBean.getType().equals(CloudManager.TYPE_ADD_FRIEND)){
                         LogUtils.i("添加好友成功");
+                        LitePalHelper.getInstance().saveNewFriend(
+                              textBean.getType(),
+                              message.getSenderUserId()
+                        );
                     }else if(textBean.getType().equals(CloudManager.TYPE_ARGEED_FRIEND)){
 
                     }
