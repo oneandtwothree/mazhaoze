@@ -68,4 +68,5 @@ dependencies {
     api project(path: ':IMLib')
     api 'org.litepal.android:java:3.0.0'
     api 'org.greenrobot:eventbus:3.1.1'
+    api 'com.google.android.material:material:1.0.0'
 }

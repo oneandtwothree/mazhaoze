@@ -8,6 +8,8 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -128,6 +130,12 @@ public class CloudManager {
        }catch (Exception e){
            e.printStackTrace();
        }
+    }
+
+
+    public void getConversationList(RongIMClient.ResultCallback<List<Conversation>> callback){
+        RongIMClient.getInstance().getConversationList(callback);
+
     }
 
 }
