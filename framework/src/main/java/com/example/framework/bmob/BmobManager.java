@@ -2,7 +2,10 @@ package com.example.framework.bmob;
 
 import android.content.Context;
 
+import com.example.framework.utils.CommonUtils;
+
 import java.io.File;
+import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
@@ -10,6 +13,7 @@ import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -110,7 +114,19 @@ public class BmobManager {
         friend.setFrienduser(imUser);
         friend.save(listener);
     }
-
+    public void addFriend(String id, final SaveListener<String> listener) {
+        queryidFriend(id, new FindListener<IMUser>() {
+            @Override
+            public void done(List<IMUser> list, BmobException e) {
+                if (e == null) {
+                    if (CommonUtils.isEmpty(list)) {
+                        IMUser imUser = list.get(0);
+                        addFriend(imUser, listener);
+                    }
+                }
+            }
+        });
+    }
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);
     }
@@ -119,6 +135,16 @@ public class BmobManager {
         return BmobUser.isLogin();
     }
 
+    public void loginByAccount(String userName, String pw, SaveListener<IMUser> listener) {
+        IMUser imUser = new IMUser();
+        imUser.setUsername(userName);
+        imUser.setPassword(pw);
+        imUser.login(listener);
+    }
+
+    public void fetchUserInfo(FetchUserInfoListener<BmobUser> listener) {
+        BmobUser.fetchUserInfo(listener);
+    }
     public interface Onupload{
         void OnUpDone();
         void OnUpFail(BmobException e);

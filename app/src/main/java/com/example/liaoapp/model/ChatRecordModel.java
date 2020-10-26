@@ -1,15 +1,22 @@
 package com.example.liaoapp.model;
 
+
 public class ChatRecordModel {
 
+    private String userId;
     private String url;
     private String nickName;
     private String endMsg;
     private String time;
-
     private int unReadSize;
 
+    public String getUserId() {
+        return userId;
+    }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUrl() {
         return url;

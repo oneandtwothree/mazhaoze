@@ -8,11 +8,16 @@ import com.example.framework.cloud.CloudManager;
 import com.example.framework.db.LitePalHelper;
 import com.example.framework.db.NewFriend;
 import com.example.framework.entity.Constants;
+import com.example.framework.event.EventManager;
+import com.example.framework.event.MessageEvent;
 import com.example.framework.gson.TextBean;
 import com.example.framework.utils.CommonUtils;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -28,6 +33,8 @@ import io.rong.imlib.model.Message;
 import io.rong.message.TextMessage;
 
 public class CloudService extends Service {
+    private  Disposable disposable;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -53,17 +60,21 @@ public class CloudService extends Service {
 
                     String content = textMessage.getContent();
                     LogUtils.i("content:"+content);
-                    final TextBean textBean = new Gson().fromJson(content, TextBean.class);
-
+                    final TextBean textBean = new TextBean();
+                    textBean.setMsg(content);
+                    textBean.setType(CloudManager.TYPE_TEXT);
 
                     if(textBean.getType().equals(CloudManager.TYPE_TEXT)){
+                        MessageEvent messageEvent = new MessageEvent(EventManager.FLAG_SEND_TEXT);
+                        messageEvent.setText(textBean.getMsg());
+                        messageEvent.setUserId(message.getSenderUserId());
+                        EventManager.post(messageEvent);
+
 
                     }else if(textBean.getType().equals(CloudManager.TYPE_ADD_FRIEND)){
                         LogUtils.i("添加好友消息");
 
-
-
-                        Disposable disposable = Observable.create(new ObservableOnSubscribe<List<NewFriend>>() {
+                        disposable  = Observable.create(new ObservableOnSubscribe<List<NewFriend>>() {
                             @Override
                             public void subscribe(ObservableEmitter<List<NewFriend>> emitter) throws Exception {
                                         emitter.onNext(LitePalHelper.getInstance().querynewfriend());
@@ -87,7 +98,9 @@ public class CloudService extends Service {
                                                 if(!isHave){
                                                    LitePalHelper.getInstance().saveNewFriend(textBean.getMsg(),message.getSenderUserId());
                                               }
-                                          }
+                                          }else {
+                                                LitePalHelper.getInstance().saveNewFriend(textBean.getMsg(),message.getSenderUserId());
+                                            }
                                     }
                                 });
 
@@ -106,4 +119,6 @@ public class CloudService extends Service {
             }
         });
     }
+
+
 }

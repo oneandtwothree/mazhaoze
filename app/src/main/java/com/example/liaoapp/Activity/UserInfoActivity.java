@@ -70,6 +70,8 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
     private TextView tvAddFriend;
 
 
+    private IMUser imUser;
+
     public static void startActivity(Context mContext, String userId) {
         Intent intent = new Intent(mContext, UserInfoActivity.class);
         intent.putExtra(Constants.INTENT_USER_ID, userId);
@@ -136,6 +138,8 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
         tvCancel = initview.findViewById(R.id.tv_cancel);
         tvAddFriend = initview.findViewById(R.id.tv_add_friend);
 
+        etMsg.setText(getString(R.string.text_me_info_tips) + BmobManager.getInstance().getUser().getNickName());
+
         tvCancel.setOnClickListener(this);
         tvAddFriend.setOnClickListener(this);
     }
@@ -150,7 +154,7 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
             public void done(List<IMUser> list, BmobException e) {
                 if(e == null){
                     if(CommonUtils.isEmpty(list)){
-                        IMUser imUser = list.get(0);
+                        imUser = list.get(0);
                         updataUserInfo(imUser);
                     }
                 }
@@ -163,8 +167,7 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
                     if(CommonUtils.isEmpty(list)){
                         for (int i = 0; i <list.size() ; i++) {
                             Friend friend = list.get(i);
-
-                            if(friend.getUser().getObjectId().equals(userid)){
+                            if(friend.getFrienduser().getObjectId().equals(userid)){
                                     btn_add_friend.setVisibility(View.GONE);
                                     ll_is_friend.setVisibility(View.VISIBLE);
                             }
@@ -210,6 +213,7 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
 
                 if(TextUtils.isEmpty(msg)){
                     msg = " 你好，我是" + BmobManager.getInstance().getUser().getNickName();
+                    return;
                 }
 
                 CloudManager.getInstance().sendaddfriendTextMessage(msg,CloudManager.TYPE_ADD_FRIEND,userid);
@@ -225,6 +229,7 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
                 DiaLogManager.getInstance().show(initview);
                 break;
             case R.id.btn_chat:
+                ChatActivity.startActivity(UserInfoActivity.this,userid,imUser.getNickName(),imUser.getPhoto());
                 break;
             case R.id.btn_audio_chat:
 

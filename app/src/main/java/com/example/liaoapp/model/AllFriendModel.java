@@ -2,10 +2,19 @@ package com.example.liaoapp.model;
 
 public class AllFriendModel {
 
+    private String id;
     private String url;
     private boolean sex;
     private String nickname;
     private String desc;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUrl() {
         return url;

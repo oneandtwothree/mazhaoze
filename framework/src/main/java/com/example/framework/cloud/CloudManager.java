@@ -57,6 +57,7 @@ public class CloudManager {
            @Override
            public void onSuccess(String s) {
                 LogUtils.e("连接成功"+s);
+
            }
 
            @Override
@@ -106,6 +107,7 @@ public class CloudManager {
     };
 
     public void sendTextMessage(String msg,String id){
+        LogUtils.i("sendTextMessage");
         TextMessage obtain = TextMessage.obtain(msg);
 
         RongIMClient.getInstance().sendMessage(Conversation.ConversationType.PRIVATE, id, obtain, null, null,iSendMessageCallback);
@@ -135,7 +137,14 @@ public class CloudManager {
 
     public void getConversationList(RongIMClient.ResultCallback<List<Conversation>> callback){
         RongIMClient.getInstance().getConversationList(callback);
-
     }
 
+    public void gethistoryMessages(String targerid, RongIMClient.ResultCallback<List<Message>> callback){
+        RongIMClient.getInstance().getHistoryMessages(Conversation.ConversationType.PRIVATE,targerid,-1,1000,callback);
+    }
+
+
+    public void getRemotehistoryMessages(String targerid, RongIMClient.ResultCallback<List<Message>> callback){
+        RongIMClient.getInstance().getRemoteHistoryMessages(Conversation.ConversationType.PRIVATE,targerid,0,20,callback);
+    }
 }

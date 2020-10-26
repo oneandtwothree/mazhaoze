@@ -1,153 +1,153 @@
-<resources>
-    <string name="app_name">遇见</string>
-    <string name="app_index_text">相遇总是美好的</string>
-    <string name="text_main_star">星球</string>
-    <string name="text_main_square">广场</string>
-    <string name="text_main_chat">聊天</string>
-    <string name="text_main_me">我的</string>
-    <string name="text_guide_skip">跳过</string>
-    <string name="text_guide_pager_1">每个人，都是一颗孤独的星球</string>
-    <string name="text_guide_pager_2">我们在黑夜中寻找光明</string>
-    <string name="text_guide_pager_3">如果遇见，请面带微笑</string>
-    <string name="text_login_phone">电话号码</string>
-    <string name="text_login_code">验证码</string>
-    <string name="text_login_password">密码</string>
-    <string name="text_login_send">发送</string>
-    <string name="text_login_login">登录</string>
-    <string name="text_login_agreement_1">我已阅读并同意</string>
-    <string name="text_login_agreement_2">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="MissingTranslation">遇见</string>
+    <string name="app_index_text" tools:ignore="MissingTranslation">相遇总是美好的</string>
+    <string name="text_main_square" tools:ignore="MissingTranslation">广场</string>
+    <string name="text_main_star" tools:ignore="MissingTranslation">星球</string>
+    <string name="text_main_chat" tools:ignore="MissingTranslation">聊天</string>
+    <string name="text_main_me" tools:ignore="MissingTranslation">我的</string>
+    <string name="text_guide_skip" tools:ignore="MissingTranslation">跳过</string>
+    <string name="text_guide_pager_1" tools:ignore="MissingTranslation">每个人，都是一颗孤独的星球</string>
+    <string name="text_guide_pager_2" tools:ignore="MissingTranslation">我们在黑夜中寻找光明</string>
+    <string name="text_guide_pager_3" tools:ignore="MissingTranslation">如果遇见，请面带微笑</string>
+    <string name="text_login_phone" tools:ignore="MissingTranslation">电话号码</string>
+    <string name="text_login_code" tools:ignore="MissingTranslation">验证码</string>
+    <string name="text_login_password" tools:ignore="MissingTranslation">密码</string>
+    <string name="text_login_send" tools:ignore="MissingTranslation">发送</string>
+    <string name="text_login_login" tools:ignore="MissingTranslation">登录</string>
+    <string name="text_login_agreement_1" tools:ignore="MissingTranslation">我已阅读并同意</string>
+    <string name="text_login_agreement_2" tools:ignore="MissingTranslation">
 <u>用户协议</u>
 </string>
-    <string name="text_login_phone_null">电话号码不能为空</string>
-    <string name="text_login_pw_null">密码不能为空</string>
-    <string name="text_login_code_null">验证码不能为空</string>
-    <string name="text_login_now_login_text">正在登陆...</string>
-    <string name="text_update_nickname_null">昵称不能为空</string>
-    <string name="text_pair_random">随机匹配中..</string>
-    <string name="text_pair_soul">灵魂匹配中..</string>
-    <string name="text_pair_fate">缘分匹配中..</string>
-    <string name="text_pair_love">恋爱匹配中..</string>
-    <string name="text_pair_null">暂无匹配对象</string>
-    <string name="text_mian_dialog_text1">欢迎来到遇见App</string>
-    <string name="text_mian_dialog_text2">听说你是第一次使用</string>
-    <string name="text_mian_dialog_text3">快来填写资料吧</string>
-    <string name="text_toast_error_qrcode">错误的二维码</string>
-    <string name="text_qrcode_fail">解析二维码失败</string>
-    <string name="text_service_calling">来电了..</string>
-    <string name="text_service_video_calling">视频来电..</string>
-    <string name="text_service_call_ing">正在呼叫</string>
-    <string name="text_service_call_video_ing">正在视频呼叫</string>
-    <string name="text_dialog_camera">拍一张</string>
-    <string name="text_dialog_ablum">从相册选择</string>
-    <string name="text_dialog_cancel">返回</string>
-    <string name="text_add_friend_contact">从通讯录导入</string>
-    <string name="text_add_friend_title">搜索结果</string>
-    <string name="text_add_friend_content">推荐好友</string>
-    <string name="text_add_friend_no_me">不能查询自己</string>
-    <string name="text_upload_title">头像上传/资料填写</string>
-    <string name="text_upload_photo_title">一张有个性的头像可以吸引人</string>
-    <string name="text_upload_nickname_title">一个名字，一个故事</string>
-    <string name="text_upload_nickname">昵称</string>
-    <string name="text_upload_done">完成</string>
-    <string name="text_search_age">岁</string>
-    <string name="text_user_add_friend">添加好友</string>
-    <string name="text_user_chat">聊天</string>
-    <string name="text_user_audio_chat">语音聊天</string>
-    <string name="text_user_video_chat">视频聊天</string>
-    <string name="text_user_resuest_succeed">请求成功</string>
-    <string name="text_user_resuest_fail">请求失败</string>
-    <string name="text_new_friend_agree">已同意</string>
-    <string name="text_new_friend_no_agree">已拒绝</string>
-    <string name="text_chat_tab_title_1">聊天记录</string>
-    <string name="text_chat_tab_title_2">通话记录</string>
-    <string name="text_chat_tab_title_3">全部好友</string>
-    <string name="text_me_info_name">姓名</string>
-    <string name="text_me_info_sex">性别</string>
-    <string name="text_me_info_age">年龄</string>
-    <string name="text_me_info_desc">签名</string>
-    <string name="text_me_info_birthday">生日</string>
-    <string name="text_me_info_constellation">星座</string>
-    <string name="text_me_info_hobby">爱好</string>
-    <string name="text_me_info_status">状态</string>
-    <string name="text_me_info_tips">"你好，我是"</string>
-    <string name="text_me_info_boy">男</string>
-    <string name="text_me_info_girl">女</string>
-    <string name="text_chat_record_audio">[音频]</string>
-    <string name="text_chat_record_video">[视频]</string>
-    <string name="text_chat_record_img">[图片]</string>
-    <string name="text_chat_record_location">[位置]</string>
-    <string name="text_call_record_un_answer">[未接电话]</string>
-    <string name="text_chat_record_dial">[已拨电话]</string>
-    <string name="text_chat_record_answer">[已接电话]</string>
-    <string name="text_push_type_img">图片</string>
-    <string name="text_push_type_music">音乐</string>
-    <string name="text_push_type_video">视频</string>
-    <string name="text_square_psuh">发布</string>
-    <string name="text_square_hint_text">记录这一刻，晒给懂你的人..</string>
-    <string name="text_all_friend_desc">签名：</string>
-    <string name="text_me_item_title_1">个人信息</string>
-    <string name="text_me_item_title_2">我的二维码</string>
-    <string name="text_me_item_title_3">新朋友</string>
-    <string name="text_me_item_title_4">隐私设置</string>
-    <string name="text_me_item_title_5">分享</string>
-    <string name="text_me_item_title_6">设置</string>
-    <string name="text_main_star_1">随机</string>
-    <string name="text_main_star_2">灵魂</string>
-    <string name="text_main_star_3">缘分</string>
-    <string name="text_main_star_4">恋爱</string>
-    <string name="menu_input_text">发表</string>
-    <string name="menu_info_save_text">保存</string>
-    <string name="dialog_add_firend_title">添加联系人</string>
-    <string name="dialog_add_firend_msg">留言..</string>
-    <string name="dialog_add_firend_confirm">确定</string>
-    <string name="dialog_add_firend_add">添加</string>
-    <string name="dialog_add_firend_cancel">取消</string>
-    <string name="text_setting_systemui_tips">通知栏提醒</string>
-    <string name="text_setting_clear_cache">清理缓存</string>
-    <string name="text_setting_update_languaue">更改语言</string>
-    <string name="text_setting_check_permissions">检查窗口权限</string>
-    <string name="text_setting_version">版本号</string>
-    <string name="text_setting_zh">中文</string>
-    <string name="text_setting_en">English</string>
-    <string name="text_setting_logout">退出登录</string>
-    <string name="text_share_download">下载到相册</string>
-    <string name="text_private_setting_title">禁止通讯录查找到我</string>
-    <string name="text_private_setting_content">开启此功能后,用户无法通过通讯录找到你</string>
-    <string name="text_delete">删除</string>
-    <string name="text_squate_love">爱</string>
-    <string name="text_star_par_tips_1">请先完善个人信息 - 星座</string>
-    <string name="text_star_par_tips_2">请先完善个人信息 - 年龄</string>
-    <string name="text_star_par_tips_3">请先完善个人信息 - 爱好</string>
-    <string name="text_star_par_tips_4">请先完善个人信息 - 单身状态</string>
-    <string name="text_star_pserver_fail">服务器连接失败</string>
-    <string name="text_server_noti_send_text">请求添加好友</string>
-    <string name="text_server_noti_receiver_text">同意添加好友</string>
-    <string name="text_chat_info_del_text">是否删除该好友?</string>
-    <string name="text_chat_info_del_error">删除失败：</string>
-    <string name="text_upload_photo_loding">正在上传头像..</string>
-    <string name="text_iv_pre_downloading">正在下载..</string>
-    <string name="text_iv_pre_save_fail">保存失败</string>
-    <string name="text_location_search">正在搜索..</string>
-    <string name="text_location">位置</string>
-    <string name="text_login_code_error">验证码错误</string>
-    <string name="text_me_info_update">正在更新资料</string>
-    <string name="text_private_set_open_ing">正在打开..</string>
-    <string name="text_private_set_close_ing">正在关闭..</string>
-    <string name="text_private_set_succeess">打开成功</string>
-    <string name="text_private_set_fail">关闭成功</string>
-    <string name="text_push_ing">正在发布..</string>
-    <string name="text_push_ed_null">请输入内容</string>
-    <string name="text_push_fail">发布失败</string>
-    <string name="text_shar_save_ing">正在保存..</string>
-    <string name="text_test_login_fail">用户名或密码错误</string>
-    <string name="text_user_info_add_friend">加个好友吧！</string>
-    <string name="text_main_exit">再按一次退出</string>
-    <string name="text_server_status_text_1">在线</string>
-    <string name="text_server_status_text_2">正在连接</string>
-    <string name="text_server_status_text_3">离线</string>
-    <string name="text_server_status_text_4">网络不可用</string>
-    <string name="text_server_status_text_5">服务器异常</string>
-    <string name="text_server_status_text_6">令牌错误</string>
+    <string name="text_login_phone_null" tools:ignore="MissingTranslation">电话号码不能为空</string>
+    <string name="text_login_pw_null" tools:ignore="MissingTranslation">密码不能为空</string>
+    <string name="text_login_code_null" tools:ignore="MissingTranslation">验证码不能为空</string>
+    <string name="text_login_now_login_text" tools:ignore="MissingTranslation">正在登陆...</string>
+    <string name="text_update_nickname_null" tools:ignore="MissingTranslation">昵称不能为空</string>
+    <string name="text_pair_random" tools:ignore="MissingTranslation">随机匹配中..</string>
+    <string name="text_pair_soul" tools:ignore="MissingTranslation">灵魂匹配中..</string>
+    <string name="text_pair_fate" tools:ignore="MissingTranslation">缘分匹配中..</string>
+    <string name="text_pair_love" tools:ignore="MissingTranslation">恋爱匹配中..</string>
+    <string name="text_pair_null" tools:ignore="MissingTranslation">暂无匹配对象</string>
+    <string name="text_mian_dialog_text1" tools:ignore="MissingTranslation">欢迎来到遇见App</string>
+    <string name="text_mian_dialog_text2" tools:ignore="MissingTranslation">听说你是第一次使用</string>
+    <string name="text_mian_dialog_text3" tools:ignore="MissingTranslation">快来填写资料吧</string>
+    <string name="text_toast_error_qrcode" tools:ignore="MissingTranslation">错误的二维码</string>
+    <string name="text_qrcode_fail" tools:ignore="MissingTranslation">解析二维码失败</string>
+    <string name="text_service_calling" tools:ignore="MissingTranslation">来电了..</string>
+    <string name="text_service_video_calling" tools:ignore="MissingTranslation">视频来电..</string>
+    <string name="text_service_call_ing" tools:ignore="MissingTranslation">正在呼叫</string>
+    <string name="text_service_call_video_ing" tools:ignore="MissingTranslation">正在视频呼叫</string>
+    <string name="text_dialog_camera" tools:ignore="MissingTranslation">拍一张</string>
+    <string name="text_dialog_ablum" tools:ignore="MissingTranslation">从相册选择</string>
+    <string name="text_dialog_cancel" tools:ignore="MissingTranslation">返回</string>
+    <string name="text_add_friend_contact" tools:ignore="MissingTranslation">从通讯录导入</string>
+    <string name="text_add_friend_title" tools:ignore="MissingTranslation">搜索结果</string>
+    <string name="text_add_friend_content" tools:ignore="MissingTranslation">推荐好友</string>
+    <string name="text_add_friend_no_me" tools:ignore="MissingTranslation">不能查询自己</string>
+    <string name="text_upload_title" tools:ignore="MissingTranslation">头像上传/资料填写</string>
+    <string name="text_upload_photo_title" tools:ignore="MissingTranslation">一张有个性的头像可以吸引人</string>
+    <string name="text_upload_nickname_title" tools:ignore="MissingTranslation">一个名字，一个故事</string>
+    <string name="text_upload_nickname" tools:ignore="MissingTranslation">昵称</string>
+    <string name="text_upload_done" tools:ignore="MissingTranslation">完成</string>
+    <string name="text_search_age" tools:ignore="MissingTranslation">岁</string>
+    <string name="text_user_add_friend" tools:ignore="MissingTranslation">添加好友</string>
+    <string name="text_user_chat" tools:ignore="MissingTranslation">聊天</string>
+    <string name="text_user_audio_chat" tools:ignore="MissingTranslation">语音聊天</string>
+    <string name="text_user_video_chat" tools:ignore="MissingTranslation">视频聊天</string>
+    <string name="text_user_resuest_succeed" tools:ignore="MissingTranslation">请求成功</string>
+    <string name="text_user_resuest_fail" tools:ignore="MissingTranslation">请求失败</string>
+    <string name="text_new_friend_agree" tools:ignore="MissingTranslation">已同意</string>
+    <string name="text_new_friend_no_agree" tools:ignore="MissingTranslation">已拒绝</string>
+    <string name="text_chat_tab_title_1" tools:ignore="MissingTranslation">聊天记录</string>
+    <string name="text_chat_tab_title_2" tools:ignore="MissingTranslation">通话记录</string>
+    <string name="text_chat_tab_title_3" tools:ignore="MissingTranslation">全部好友</string>
+    <string name="text_me_info_name" tools:ignore="MissingTranslation">姓名</string>
+    <string name="text_me_info_sex" tools:ignore="MissingTranslation">性别</string>
+    <string name="text_me_info_age" tools:ignore="MissingTranslation">年龄</string>
+    <string name="text_me_info_desc" tools:ignore="MissingTranslation">签名</string>
+    <string name="text_me_info_birthday" tools:ignore="MissingTranslation">生日</string>
+    <string name="text_me_info_constellation" tools:ignore="MissingTranslation">星座</string>
+    <string name="text_me_info_hobby" tools:ignore="MissingTranslation">爱好</string>
+    <string name="text_me_info_status" tools:ignore="MissingTranslation">状态</string>
+    <string name="text_me_info_tips" tools:ignore="MissingTranslation">"你好，我是"</string>
+    <string name="text_me_info_boy" tools:ignore="MissingTranslation">男</string>
+    <string name="text_me_info_girl" tools:ignore="MissingTranslation">女</string>
+    <string name="text_chat_record_audio" tools:ignore="MissingTranslation">[音频]</string>
+    <string name="text_chat_record_video" tools:ignore="MissingTranslation">[视频]</string>
+    <string name="text_chat_record_img" tools:ignore="MissingTranslation">[图片]</string>
+    <string name="text_chat_record_location" tools:ignore="MissingTranslation">[位置]</string>
+    <string name="text_call_record_un_answer" tools:ignore="MissingTranslation">[未接电话]</string>
+    <string name="text_chat_record_dial" tools:ignore="MissingTranslation">[已拨电话]</string>
+    <string name="text_chat_record_answer" tools:ignore="MissingTranslation">[已接电话]</string>
+    <string name="text_push_type_img" tools:ignore="MissingTranslation">图片</string>
+    <string name="text_push_type_music" tools:ignore="MissingTranslation">音乐</string>
+    <string name="text_push_type_video" tools:ignore="MissingTranslation">视频</string>
+    <string name="text_square_psuh" tools:ignore="MissingTranslation">发布</string>
+    <string name="text_square_hint_text" tools:ignore="MissingTranslation">记录这一刻，晒给懂你的人..</string>
+    <string name="text_all_friend_desc" tools:ignore="MissingTranslation">签名：</string>
+    <string name="text_me_item_title_1" tools:ignore="MissingTranslation">个人信息</string>
+    <string name="text_me_item_title_2" tools:ignore="MissingTranslation">我的二维码</string>
+    <string name="text_me_item_title_3" tools:ignore="MissingTranslation">新朋友</string>
+    <string name="text_me_item_title_4" tools:ignore="MissingTranslation">隐私设置</string>
+    <string name="text_me_item_title_5" tools:ignore="MissingTranslation">分享</string>
+    <string name="text_me_item_title_6" tools:ignore="MissingTranslation">设置</string>
+    <string name="text_main_star_1" tools:ignore="MissingTranslation">随机</string>
+    <string name="text_main_star_2" tools:ignore="MissingTranslation">灵魂</string>
+    <string name="text_main_star_3" tools:ignore="MissingTranslation">缘分</string>
+    <string name="text_main_star_4" tools:ignore="MissingTranslation">恋爱</string>
+    <string name="menu_input_text" tools:ignore="MissingTranslation">发表</string>
+    <string name="menu_info_save_text" tools:ignore="MissingTranslation">保存</string>
+    <string name="dialog_add_firend_title" tools:ignore="MissingTranslation">添加联系人</string>
+    <string name="dialog_add_firend_msg" tools:ignore="MissingTranslation">留言..</string>
+    <string name="dialog_add_firend_confirm" tools:ignore="MissingTranslation">确定</string>
+    <string name="dialog_add_firend_add" tools:ignore="MissingTranslation">添加</string>
+    <string name="dialog_add_firend_cancel" tools:ignore="MissingTranslation">取消</string>
+    <string name="text_setting_systemui_tips" tools:ignore="MissingTranslation">通知栏提醒</string>
+    <string name="text_setting_clear_cache" tools:ignore="MissingTranslation">清理缓存</string>
+    <string name="text_setting_update_languaue" tools:ignore="MissingTranslation">更改语言</string>
+    <string name="text_setting_check_permissions" tools:ignore="MissingTranslation">检查窗口权限</string>
+    <string name="text_setting_version" tools:ignore="MissingTranslation">版本号</string>
+    <string name="text_setting_zh" tools:ignore="MissingTranslation">中文</string>
+    <string name="text_setting_en" tools:ignore="MissingTranslation">English</string>
+    <string name="text_setting_logout" tools:ignore="MissingTranslation">退出登录</string>
+    <string name="text_share_download" tools:ignore="MissingTranslation">下载到相册</string>
+    <string name="text_private_setting_title" tools:ignore="MissingTranslation">禁止通讯录查找到我</string>
+    <string name="text_private_setting_content" tools:ignore="MissingTranslation">开启此功能后,用户无法通过通讯录找到你</string>
+    <string name="text_delete" tools:ignore="MissingTranslation">删除</string>
+    <string name="text_squate_love" tools:ignore="MissingTranslation">爱</string>
+    <string name="text_star_par_tips_1" tools:ignore="MissingTranslation">请先完善个人信息 - 星座</string>
+    <string name="text_star_par_tips_2" tools:ignore="MissingTranslation">请先完善个人信息 - 年龄</string>
+    <string name="text_star_par_tips_3" tools:ignore="MissingTranslation">请先完善个人信息 - 爱好</string>
+    <string name="text_star_par_tips_4" tools:ignore="MissingTranslation">请先完善个人信息 - 单身状态</string>
+    <string name="text_star_pserver_fail" tools:ignore="MissingTranslation">服务器连接失败</string>
+    <string name="text_server_noti_send_text" tools:ignore="MissingTranslation">请求添加好友</string>
+    <string name="text_server_noti_receiver_text" tools:ignore="MissingTranslation">同意添加好友</string>
+    <string name="text_chat_info_del_text" tools:ignore="MissingTranslation">是否删除该好友?</string>
+    <string name="text_chat_info_del_error" tools:ignore="MissingTranslation">删除失败：</string>
+    <string name="text_upload_photo_loding" tools:ignore="MissingTranslation">正在上传头像..</string>
+    <string name="text_iv_pre_downloading" tools:ignore="MissingTranslation">正在下载..</string>
+    <string name="text_iv_pre_save_fail" tools:ignore="MissingTranslation">保存失败</string>
+    <string name="text_location_search" tools:ignore="MissingTranslation">正在搜索..</string>
+    <string name="text_location" tools:ignore="MissingTranslation">位置</string>
+    <string name="text_login_code_error" tools:ignore="MissingTranslation">验证码错误</string>
+    <string name="text_me_info_update" tools:ignore="MissingTranslation">正在更新资料</string>
+    <string name="text_private_set_open_ing" tools:ignore="MissingTranslation">正在打开..</string>
+    <string name="text_private_set_close_ing" tools:ignore="MissingTranslation">正在关闭..</string>
+    <string name="text_private_set_succeess" tools:ignore="MissingTranslation">打开成功</string>
+    <string name="text_private_set_fail" tools:ignore="MissingTranslation">关闭成功</string>
+    <string name="text_push_ing" tools:ignore="MissingTranslation">正在发布..</string>
+    <string name="text_push_ed_null" tools:ignore="MissingTranslation">请输入内容</string>
+    <string name="text_push_fail" tools:ignore="MissingTranslation">发布失败</string>
+    <string name="text_shar_save_ing" tools:ignore="MissingTranslation">正在保存..</string>
+    <string name="text_test_login_fail" tools:ignore="MissingTranslation">用户名或密码错误</string>
+    <string name="text_user_info_add_friend" tools:ignore="MissingTranslation">加个好友吧！</string>
+    <string name="text_main_exit" tools:ignore="MissingTranslation">再按一次退出</string>
+    <string name="text_server_status_text_1" tools:ignore="MissingTranslation">在线</string>
+    <string name="text_server_status_text_2" tools:ignore="MissingTranslation">正在连接</string>
+    <string name="text_server_status_text_3" tools:ignore="MissingTranslation">离线</string>
+    <string name="text_server_status_text_4" tools:ignore="MissingTranslation">网络不可用</string>
+    <string name="text_server_status_text_5" tools:ignore="MissingTranslation">服务器异常</string>
+    <string name="text_server_status_text_6" tools:ignore="MissingTranslation">令牌错误</string>
     <string-array name="ConstellatioArray">
     <item>白羊座</item>
     <item>金牛座</item>

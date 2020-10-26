@@ -6,6 +6,7 @@ public class EventManager {
 
     public static final int FLAG_UPDATE_FRIEND_LIST = 1000;
 
+
     //发送文本数据
     public static final int FLAG_SEND_TEXT = 1001;
     //发送图片数据
@@ -40,5 +41,7 @@ public class EventManager {
     public static void post(int type){
         EventBus.getDefault().post(new MessageEvent(type));
     }
-
+    public static void post(MessageEvent messageEvent){
+        EventBus.getDefault().post(messageEvent);
+    }
 }

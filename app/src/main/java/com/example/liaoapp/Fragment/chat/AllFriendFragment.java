@@ -59,11 +59,18 @@ public class AllFriendFragment extends BaseFragment implements SwipeRefreshLayou
 
         mallfriendadap = new CommonAdapter<>(modelList, new CommonAdapter.OnBindDataListener<AllFriendModel>() {
             @Override
-            public void onBindViewHolder(AllFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
+            public void onBindViewHolder(final AllFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
                 commonViewHolder.setImgurl(getActivity(),R.id.iv_photo,model.getUrl());
                 commonViewHolder.setText(R.id.tv_nickname,model.getNickname());
                 commonViewHolder.setText(R.id.tv_desc,model.getDesc());
                 commonViewHolder.setImgsex(R.id.iv_sex,model.isSex()?R.drawable.img_boy_icon:R.drawable.img_girl_icon);
+
+                commonViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UserInfoActivity.startActivity(getActivity(),model.getId());
+                    }
+                });
 
             }
 
@@ -80,6 +87,7 @@ public class AllFriendFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     private void queryMyFriends(){
+        mAllFriendRefreshLayout.setRefreshing(true);
         BmobManager.getInstance().queryallFriend(new FindListener<Friend>() {
             @Override
             public void done(List<Friend> list, BmobException e) {
@@ -102,6 +110,7 @@ public class AllFriendFragment extends BaseFragment implements SwipeRefreshLayou
                                                 IMUser imUser = list.get(0);
 
                                                 AllFriendModel allFriendModel = new AllFriendModel();
+                                                allFriendModel.setId(imUser.getObjectId());
                                                 allFriendModel.setUrl(imUser.getPhoto());
                                                 allFriendModel.setNickname(imUser.getNickName());
                                                 allFriendModel.setDesc("签名："+imUser.getDesc());

@@ -38,7 +38,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_me, null);
-        initView();
+         initView();
         return view;
 
     }

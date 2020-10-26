@@ -54,6 +54,7 @@
         <activity android:name=".Activity.NewFriendActivity"
             android:label="新朋友"
             />
+        <activity android:name=".Activity.ChatActivity"/>
 
 
         <service android:name=".service.CloudService" />
