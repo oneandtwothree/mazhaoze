@@ -22,6 +22,7 @@ import com.example.framework.utils.CommonUtils;
 import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.Activity.UserInfoActivity;
 import com.example.liaoapp.R;
+import com.example.liaoapp.model.AllFriendModel;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -33,8 +34,13 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 
-public class AllFriendFragment extends BaseFragment{
+public class AllFriendFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+    private SwipeRefreshLayout mAllFriendRefreshLayout;
+    private RecyclerView mAllFriendView;
 
+    private View item_empty_view;
+    private CommonAdapter<AllFriendModel> mallfriendadap;
+    private List<AllFriendModel> modelList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +50,82 @@ public class AllFriendFragment extends BaseFragment{
     }
 
     private void initView(final View view) {
+        item_empty_view = view.findViewById(R.id.item_empty_view);
+        mAllFriendRefreshLayout = view.findViewById(R.id.mAllFriendRefreshLayout);
+        mAllFriendView = view.findViewById(R.id.mAllFriendView);
 
+        mAllFriendView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAllFriendView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+
+        mallfriendadap = new CommonAdapter<>(modelList, new CommonAdapter.OnBindDataListener<AllFriendModel>() {
+            @Override
+            public void onBindViewHolder(AllFriendModel model, CommonViewHolder commonViewHolder, int type, int position) {
+                commonViewHolder.setImgurl(getActivity(),R.id.iv_photo,model.getUrl());
+                commonViewHolder.setText(R.id.tv_nickname,model.getNickname());
+                commonViewHolder.setText(R.id.tv_desc,model.getDesc());
+                commonViewHolder.setImgsex(R.id.iv_sex,model.isSex()?R.drawable.img_boy_icon:R.drawable.img_girl_icon);
+
+            }
+
+            @Override
+            public int getLayoutId(int type) {
+                return R.layout.layout_all_friend_item;
+            }
+        });
+
+        mAllFriendView.setAdapter(mallfriendadap);
+
+        mAllFriendRefreshLayout.setOnRefreshListener(this);
+        queryMyFriends();
     }
 
+    private void queryMyFriends(){
+        BmobManager.getInstance().queryallFriend(new FindListener<Friend>() {
+            @Override
+            public void done(List<Friend> list, BmobException e) {
+                mAllFriendRefreshLayout.setRefreshing(false);
+                    if(e == null){
+                        if(CommonUtils.isEmpty(list)){
+                            item_empty_view.setVisibility(View.GONE);
+                            mAllFriendView.setVisibility(View.VISIBLE);
+                            if (modelList.size() > 0) {
+                                modelList.clear();
+                            }
+                                for (int i = 0; i <list.size() ; i++) {
+                                Friend friend = list.get(i);
+                                String objectId = friend.getFrienduser().getObjectId();
+                                BmobManager.getInstance().queryidFriend(objectId, new FindListener<IMUser>() {
+                                    @Override
+                                    public void done(List<IMUser> list, BmobException e) {
+                                        if(e == null) {
+                                            if (CommonUtils.isEmpty(list)) {
+                                                IMUser imUser = list.get(0);
+
+                                                AllFriendModel allFriendModel = new AllFriendModel();
+                                                allFriendModel.setUrl(imUser.getPhoto());
+                                                allFriendModel.setNickname(imUser.getNickName());
+                                                allFriendModel.setDesc("签名："+imUser.getDesc());
+                                                allFriendModel.setSex(imUser.isSex());
+                                                modelList.add(allFriendModel);
+                                                mallfriendadap.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }else {
+                            item_empty_view.setVisibility(View.VISIBLE);
+                            mAllFriendView.setVisibility(View.GONE);
+                        }
+                    }
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        if(mAllFriendRefreshLayout.isRefreshing()){
+            queryMyFriends();
+        }
+    }
 }
