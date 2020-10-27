@@ -106,7 +106,7 @@ public class CloudManager {
         }
     };
 
-    public void sendTextMessage(String msg,String id){
+    private void sendTextMessage(String msg,String id){
         LogUtils.i("sendTextMessage");
         TextMessage obtain = TextMessage.obtain(msg);
 

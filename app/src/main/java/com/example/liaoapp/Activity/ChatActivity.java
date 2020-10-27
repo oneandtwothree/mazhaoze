@@ -200,12 +200,10 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
             String name = message.getObjectName();
             if(name.equals(CloudManager.MSG_TEXT_NAME)){
                 TextMessage textMessage = (TextMessage) message.getContent();
-                LogUtils.i("textMessage:"+textMessage.getExtra());
                 String msg = (String) textMessage.getContent();
                 LogUtils.i("msg:"+msg);
-                TextBean textBean = new TextBean();
-                textBean.setMsg(msg);
-                textBean.setType(CloudManager.TYPE_TEXT);
+                TextBean textBean = new Gson().fromJson(msg, TextBean.class);
+
                 if(textBean.getType().equals(CloudManager.TYPE_TEXT)){
                     if(message.getSenderUserId().equals(youruserid)){
                         addText(1,textBean.getMsg());
@@ -246,7 +244,7 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                 if(TextUtils.isEmpty(trim)){
                     return;
                 }
-                CloudManager.getInstance().sendTextMessage(trim,youruserid);
+                CloudManager.getInstance().sendTextMessage(trim,CloudManager.TYPE_TEXT,youruserid);
                 addText(0,trim);
                 etInputMsg.setText("");
                 break;

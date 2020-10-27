@@ -49,6 +49,8 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
     private CommonAdapter<ChatRecordModel> mChatRecordAdapter;
     private List<ChatRecordModel> mList = new ArrayList<>();
 
+    private int ji = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_record, null);
@@ -75,11 +77,11 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
                 viewHolder.setText(R.id.tv_content, model.getEndMsg());
                 viewHolder.setText(R.id.tv_time, model.getTime());
 
-                if(model.getUnReadSize() == 0){
+                if(ji == model.getUnReadSize()){
                     viewHolder.getView(R.id.tv_un_read).setVisibility(View.GONE);
                 }else{
                     viewHolder.getView(R.id.tv_un_read).setVisibility(View.VISIBLE);
-                    viewHolder.setText(R.id.tv_un_read, model.getUnReadSize() + "");
+                    viewHolder.setText(R.id.tv_un_read, model.getUnReadSize()-ji+ "");
                 }
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +89,7 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
                     public void onClick(View v) {
                         ChatActivity.startActivity(getActivity(),
                                 model.getUserId(),model.getNickName(),model.getUrl());
+                        ji = model.getUnReadSize();
                     }
                 });
 
@@ -135,9 +138,7 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
                                         if (objectName.equals(CloudManager.MSG_TEXT_NAME)) {
                                             TextMessage textMessage = (TextMessage) c.getLatestMessage();
                                             String msg = textMessage.getContent();
-                                            TextBean textBean = new TextBean();
-                                            textBean.setMsg(msg);
-                                            textBean.setType(CloudManager.TYPE_TEXT);
+                                            TextBean textBean = new Gson().fromJson(msg, TextBean.class);
                                             if (textBean.getType().equals(CloudManager.TYPE_TEXT)) {
                                                 chatRecordModel.setEndMsg(textBean.getMsg());
                                                 LogUtils.i(chatRecordModel.toString());

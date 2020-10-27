@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
 import com.example.framework.db.LitePalHelper;
 import com.example.framework.db.NewFriend;
@@ -21,6 +22,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -60,17 +63,13 @@ public class CloudService extends Service {
 
                     String content = textMessage.getContent();
                     LogUtils.i("content:"+content);
-                    final TextBean textBean = new TextBean();
-                    textBean.setMsg(content);
-                    textBean.setType(CloudManager.TYPE_TEXT);
+                    final TextBean textBean = new Gson().fromJson(content, TextBean.class);
 
                     if(textBean.getType().equals(CloudManager.TYPE_TEXT)){
                         MessageEvent messageEvent = new MessageEvent(EventManager.FLAG_SEND_TEXT);
                         messageEvent.setText(textBean.getMsg());
                         messageEvent.setUserId(message.getSenderUserId());
                         EventManager.post(messageEvent);
-
-
                     }else if(textBean.getType().equals(CloudManager.TYPE_ADD_FRIEND)){
                         LogUtils.i("添加好友消息");
 
@@ -111,7 +110,14 @@ public class CloudService extends Service {
                               message.getSenderUserId()
                         );
                     }else if(textBean.getType().equals(CloudManager.TYPE_ARGEED_FRIEND)){
-
+                        BmobManager.getInstance().addFriend(message.getSenderUserId(), new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e == null) {
+                                    EventManager.post(EventManager.FLAG_UPDATE_FRIEND_LIST);
+                                }
+                            }
+                        });
                     }
 
                 }
