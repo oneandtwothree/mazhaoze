@@ -21,6 +21,7 @@ import com.example.framework.event.MessageEvent;
 import com.example.framework.gson.TextBean;
 import com.example.framework.utils.CommonUtils;
 import com.example.framework.utils.LogUtils;
+import com.example.framework.utils.SpUtils;
 import com.example.liaoapp.Activity.ChatActivity;
 import com.example.liaoapp.R;
 import com.example.liaoapp.model.ChatRecordModel;
@@ -55,6 +56,8 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_record, null);
         initView(view);
+        int xiaoji = SpUtils.getInstance().getint("xiaoji", 0);
+        ji = xiaoji;
         return view;
     }
 
@@ -193,6 +196,12 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
     public void onResume() {
         super.onResume();
         queryChatRecord();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SpUtils.getInstance().putint("xiaoji",ji);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
