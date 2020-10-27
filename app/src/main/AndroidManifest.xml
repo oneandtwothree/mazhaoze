@@ -55,7 +55,8 @@
             android:label="新朋友"
             />
         <activity android:name=".Activity.ChatActivity"/>
-
+        <activity android:name=".Activity.ImagePreviewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <service android:name=".service.CloudService" />
 

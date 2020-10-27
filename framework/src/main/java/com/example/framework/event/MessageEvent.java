@@ -5,6 +5,15 @@ public class MessageEvent {
     private int type;
     private String text;
     private String userId;
+    private String imgurl;
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
 
     public String getText() {
         return text;

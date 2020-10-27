@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.framework.utils.GlideHelper;
 
+import java.io.File;
+
 public class CommonViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> mviews;
@@ -48,7 +50,11 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         GlideHelper.setimg(context,url,view);
         return this;
     }
-
+    public CommonViewHolder setImgFile(Context context,int viewid, File file){
+        ImageView view = getView(viewid);
+        GlideHelper.setimg(context,file,view);
+        return this;
+    }
     public CommonViewHolder setImgsex(int viewid, int resid){
         ImageView view = getView(viewid);
         view.setImageResource(resid);

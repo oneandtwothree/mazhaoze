@@ -3,6 +3,7 @@ package com.example.liaoapp.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
@@ -33,6 +34,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Message;
+import io.rong.message.ImageMessage;
 import io.rong.message.TextMessage;
 
 public class CloudService extends Service {
@@ -118,6 +120,17 @@ public class CloudService extends Service {
                                 }
                             }
                         });
+                    }
+                }else if(objectName.equals(CloudManager.MSG_IMAGE_NAME)){
+
+                    ImageMessage content = (ImageMessage) message.getContent();
+                    String url = content.getRemoteUri().toString();
+                    if(!TextUtils.isEmpty(url)){
+                        LogUtils.i("url"+url);
+                        MessageEvent messageEvent = new MessageEvent(EventManager.FLAG_SEND_IMAGE);
+                        messageEvent.setImgurl(url);
+                        messageEvent.setUserId(message.getSenderUserId());
+                        EventManager.post(messageEvent);
                     }
 
                 }
