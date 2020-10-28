@@ -1,26 +1,79 @@
 package com.example.framework.event;
 
+import android.view.SurfaceView;
+
 public class MessageEvent {
 
     private int type;
-    private String text;
+
+    //文本消息
     private String userId;
-    private String imgurl;
+    private String text;
 
-    public String getImgurl() {
-        return imgurl;
+    //图片消息
+    private String imgUrl;
+
+    //位置消息
+    private double la;
+    private double lo;
+    private String address;
+
+    //相机
+    private SurfaceView mSurfaceView;
+
+    //服务器连接状态
+    private boolean connectStatus;
+
+    public boolean isConnectStatus() {
+        return connectStatus;
     }
 
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
+    public void setConnectStatus(boolean connectStatus) {
+        this.connectStatus = connectStatus;
     }
 
-    public String getText() {
-        return text;
+    public SurfaceView getmSurfaceView() {
+        return mSurfaceView;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setmSurfaceView(SurfaceView mSurfaceView) {
+        this.mSurfaceView = mSurfaceView;
+    }
+
+    public double getLa() {
+        return la;
+    }
+
+    public void setLa(double la) {
+        this.la = la;
+    }
+
+    public double getLo() {
+        return lo;
+    }
+
+    public void setLo(double lo) {
+        this.lo = lo;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getUserId() {
@@ -31,6 +84,14 @@ public class MessageEvent {
         this.userId = userId;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     public MessageEvent(int type) {
         this.type = type;
     }
@@ -39,7 +100,12 @@ public class MessageEvent {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    @Override
+    public String toString() {
+        return "MessageEvent{" +
+                "type=" + type +
+                ", userId='" + userId + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

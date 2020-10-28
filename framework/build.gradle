@@ -70,4 +70,8 @@ dependencies {
     api 'org.greenrobot:eventbus:3.1.1'
     api 'com.google.android.material:material:1.0.0'
     api 'com.github.chrisbanes:PhotoView:2.3.0'
+    api 'com.amap.api:3dmap:latest.integration'
+    api 'com.amap.api:search:latest.integration'
+    api 'com.amap.api:location:latest.integration'
+
 }

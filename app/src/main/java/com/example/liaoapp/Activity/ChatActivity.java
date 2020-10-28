@@ -28,6 +28,7 @@ import com.example.framework.event.EventManager;
 import com.example.framework.event.MessageEvent;
 import com.example.framework.gson.TextBean;
 import com.example.framework.helper.FileHelper;
+import com.example.framework.manager.MapManager;
 import com.example.framework.utils.CommonUtils;
 import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.R;
@@ -45,6 +46,7 @@ import java.util.List;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Message;
 import io.rong.message.ImageMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 
 public class ChatActivity extends BaseBackActivity implements View.OnClickListener {
@@ -57,7 +59,9 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
     private static final int TYPE_RIGHT_IMAGE = 4;
     private static final int TYPE_RIGHT_LOCATION = 5;
 
+    private static final int LOCATION_REQUEST_CODE = 1888;
 
+    private static final int CHAT_INFO_REQUEST_CODE = 1889;
 
     private LinearLayout llChatBg;
     private RecyclerView mChatView;
@@ -135,42 +139,67 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                             commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_right_photo,myuserphoto);
                             break;
                         case TYPE_LEFT_IMAGE:
-                            commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_left_img,model.getImgurl());
+                            commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_left_img,model.getImgUrl());
                             commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_left_photo,youruserphoto);
 
                             commonViewHolder.getView(R.id.iv_left_img).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    ImagePreviewActivity.startActivity(ChatActivity.this,model.getImgurl(),true);
+                                    ImagePreviewActivity.startActivity(ChatActivity.this,model.getImgUrl(),true);
                                 }
                             });
 
                             break;
                         case TYPE_RIGHT_IMAGE:
-                            if(TextUtils.isEmpty(model.getImgurl())){
-                                if(model.getFile() != null){
-                                    commonViewHolder.setImgFile(ChatActivity.this,R.id.iv_right_img,model.getFile());
+                            if(TextUtils.isEmpty(model.getImgUrl())){
+                                if(model.getLocalFile() != null){
+                                    commonViewHolder.setImgFile(ChatActivity.this,R.id.iv_right_img,model.getLocalFile());
                                     commonViewHolder.getView(R.id.iv_right_img).setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            ImagePreviewActivity.startActivity(ChatActivity.this,model.getFile().getPath(),false);
+                                            ImagePreviewActivity.startActivity(ChatActivity.this,model.getLocalFile().getPath(),false);
                                         }
                                     });
                                 }
                             }else {
-                                commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_right_img,model.getImgurl());
+                                commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_right_img,model.getImgUrl());
                                 commonViewHolder.getView(R.id.iv_right_img).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        ImagePreviewActivity.startActivity(ChatActivity.this,model.getImgurl(),true);
+                                        ImagePreviewActivity.startActivity(ChatActivity.this,model.getImgUrl(),true);
                                     }
                                 });
                             }
                             commonViewHolder.setImgurl(ChatActivity.this,R.id.iv_right_photo,myuserphoto);
                             break;
                         case TYPE_LEFT_LOCATION:
+                            commonViewHolder.setImgurl(ChatActivity.this, R.id.iv_left_photo, youruserphoto);
+                            commonViewHolder.setImgurl(ChatActivity.this, R.id.iv_left_location_img
+                                    , model.getMapUrl());
+                            commonViewHolder.setText(R.id.tv_left_address, model.getAddress());
+
+                            commonViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    LocationActivity.startActivity(ChatActivity.this, false,
+                                            model.getLa(), model.getLo(), model.getAddress(), LOCATION_REQUEST_CODE);
+                                }
+                            });
+
                             break;
                         case TYPE_RIGHT_LOCATION:
+                            commonViewHolder.setImgurl(ChatActivity.this, R.id.iv_right_photo, myuserphoto);
+                            commonViewHolder.setImgurl(ChatActivity.this,
+                                    R.id.iv_right_location_img, model.getMapUrl());
+                            commonViewHolder.setText(R.id.tv_right_address, model.getAddress());
+
+                            commonViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    LocationActivity.startActivity(ChatActivity.this, false,
+                                            model.getLa(), model.getLo(), model.getAddress(), LOCATION_REQUEST_CODE);
+                                }
+                            });
                             break;
                     }
 
@@ -269,8 +298,15 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                 }
 
 
-            }else if(name.equals(CloudManager.MSG_LOCATION_NAME)){
-
+            }else if (name.equals(CloudManager.MSG_LOCATION_NAME)) {
+                LocationMessage locationMessage = (LocationMessage) message.getContent();
+                if (message.getSenderUserId().equals(youruserid)) {
+                    addLocation(1, locationMessage.getLat(),
+                            locationMessage.getLng(), locationMessage.getPoi());
+                } else {
+                    addLocation(0, locationMessage.getLat(),
+                            locationMessage.getLng(), locationMessage.getPoi());
+                }
             }
         }
     }
@@ -313,6 +349,7 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                 FileHelper.getInstance().toTu(this);
                 break;
             case R.id.ll_location:
+                LocationActivity.startActivity(this, true, 0, 0, "", LOCATION_REQUEST_CODE);
                 break;
         }
     }
@@ -345,7 +382,7 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
         }else {
             chatModel.setType(TYPE_RIGHT_IMAGE);
         }
-        chatModel.setImgurl(url);
+        chatModel.setImgUrl(url);
         baseAddItemMsg(chatModel);
     }
 
@@ -357,10 +394,22 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
         }else {
             chatModel.setType(TYPE_RIGHT_IMAGE);
         }
-        chatModel.setFile(file);
+        chatModel.setLocalFile(file);
         baseAddItemMsg(chatModel);
     }
-
+    private void addLocation(int index, double la, double lo, String address) {
+        ChatModel model = new ChatModel();
+        if (index == 1) {
+            model.setType(TYPE_LEFT_LOCATION);
+        } else {
+            model.setType(TYPE_RIGHT_LOCATION);
+        }
+        model.setLa(la);
+        model.setLo(lo);
+        model.setAddress(address);
+        model.setMapUrl(MapManager.getInstance().getMapUrl(la, lo));
+        baseAddItemMsg(model);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -376,12 +425,39 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                         upload = new File(s);
                     }
                 }
+            }else if (requestCode == LOCATION_REQUEST_CODE) {
+                final double la = data.getDoubleExtra("la", 0);
+                final double lo = data.getDoubleExtra("lo", 0);
+                String address = data.getStringExtra("address");
+
+                LogUtils.i("la:" + la);
+                LogUtils.i("lo:" + lo);
+                LogUtils.i("address:" + address);
+
+                if (TextUtils.isEmpty(address)) {
+                    MapManager.getInstance().poi2address(la, lo, new MapManager.OnPoi2AddressGeocodeListener() {
+                        @Override
+                        public void poi2address(String address) {
+                            //发送位置消息
+                            CloudManager.getInstance().sendLocationMessage(youruserid, la, lo, address);
+                            addLocation(1, la, lo, address);
+                        }
+                    });
+                } else {
+                    //发送位置消息
+                    CloudManager.getInstance().sendLocationMessage(youruserid, la, lo, address);
+                    addLocation(1, la, lo, address);
+                }
+
+            } else if (requestCode == CHAT_INFO_REQUEST_CODE) {
+                finish();
             }
         }
 
         if(upload != null){
             CloudManager.getInstance().sendImageMessage(youruserid,upload);
-            addImage(0,upload);
+            addImage(1,upload);
+            upload = null;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -398,9 +474,10 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                 addText(1, event.getText());
                 break;
             case EventManager.FLAG_SEND_IMAGE:
-                addImage(1, event.getImgurl());
+                addImage(1, event.getImgUrl());
                 break;
             case EventManager.FLAG_SEND_LOCATION:
+                addLocation(1, event.getLa(), event.getLo(), event.getAddress());
                 break;
         }
     }

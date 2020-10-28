@@ -16,6 +16,7 @@ import com.example.framework.gson.TextBean;
 import com.example.framework.utils.CommonUtils;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
+import com.example.liaoapp.R;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -35,10 +36,22 @@ import io.reactivex.schedulers.Schedulers;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Message;
 import io.rong.message.ImageMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 
 public class CloudService extends Service {
     private  Disposable disposable;
+
+    private static final int H_TIME_WHAT = 1000;
+
+
+    private int callTimer = 0;
+
+    private boolean isMove = false;
+    //是否拖拽
+    private boolean isDrag = false;
+    private int mLastX;
+    private int mLastY;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -128,12 +141,22 @@ public class CloudService extends Service {
                     if(!TextUtils.isEmpty(url)){
                         LogUtils.i("url"+url);
                         MessageEvent messageEvent = new MessageEvent(EventManager.FLAG_SEND_IMAGE);
-                        messageEvent.setImgurl(url);
+                        messageEvent.setImgUrl(url);
                         messageEvent.setUserId(message.getSenderUserId());
                         EventManager.post(messageEvent);
                     }
 
-                }
+                }else if (objectName.equals(CloudManager.MSG_LOCATION_NAME)) {
+                LocationMessage locationMessage = (LocationMessage) message.getContent();
+                LogUtils.e("locationMessage:" + locationMessage.toString());
+                MessageEvent event = new MessageEvent(EventManager.FLAG_SEND_LOCATION);
+                event.setLa(locationMessage.getLat());
+                event.setLo(locationMessage.getLng());
+                event.setUserId(message.getSenderUserId());
+                event.setAddress(locationMessage.getPoi());
+                EventManager.post(event);
+
+            }
                 return false;
             }
         });

@@ -2,28 +2,72 @@ package com.example.liaoapp.model;
 
 import java.io.File;
 
+
 public class ChatModel {
 
     private int type;
+
+    //文本
     private String text;
 
-    private String imgurl;
-    private File file;
+    //图片
+    private String imgUrl;
+    private File localFile;
 
-    public File getFile() {
-        return file;
+    //位置
+    private double la;
+    private double lo;
+    private String address;
+    private String mapUrl;
+
+
+
+    public double getLa() {
+        return la;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setLa(double la) {
+        this.la = la;
     }
 
-    public String getImgurl() {
-        return imgurl;
+    public double getLo() {
+        return lo;
     }
 
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
+    public void setLo(double lo) {
+        this.lo = lo;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMapUrl() {
+        return mapUrl;
+    }
+
+    public void setMapUrl(String mapUrl) {
+        this.mapUrl = mapUrl;
+    }
+
+    public File getLocalFile() {
+        return localFile;
+    }
+
+    public void setLocalFile(File localFile) {
+        this.localFile = localFile;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public int getType() {

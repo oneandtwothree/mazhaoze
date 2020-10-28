@@ -18,6 +18,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.message.ImageMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 
 public class CloudManager {
@@ -182,5 +183,13 @@ public class CloudManager {
         ImageMessage obtain = ImageMessage.obtain(Uri.fromFile(file), Uri.fromFile(file), true);
         RongIMClient.getInstance().sendImageMessage(Conversation.ConversationType.PRIVATE,id,obtain,null,null,sendImageMessageCallback);
     }
+    public void sendLocationMessage(String mTargetId, double lat, double lng, String poi) {
+        LocationMessage locationMessage = LocationMessage.obtain(lat, lng, poi, null);
+        io.rong.imlib.model.Message message = io.rong.imlib.model.Message.obtain(
+                mTargetId, Conversation.ConversationType.PRIVATE, locationMessage);
+        RongIMClient.getInstance().sendLocationMessage(message,
+                null, null, iSendMessageCallback);
+    }
+
 
 }

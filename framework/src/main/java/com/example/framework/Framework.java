@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
+import com.example.framework.manager.MapManager;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 
@@ -32,5 +33,6 @@ public class Framework {
         BmobManager.getInstance().initbmob(mContext);
         CloudManager.getInstance().initCloud(mContext);
         LitePal.initialize(mContext);
+        MapManager.getInstance().initMap(mContext);
     }
 }
