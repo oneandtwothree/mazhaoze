@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
 import com.example.framework.manager.MapManager;
+import com.example.framework.manager.VoiceManager;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 

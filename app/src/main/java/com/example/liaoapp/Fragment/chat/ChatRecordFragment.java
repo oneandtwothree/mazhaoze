@@ -199,8 +199,8 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         SpUtils.getInstance().putint("xiaoji",ji);
     }
 
