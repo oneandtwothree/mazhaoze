@@ -86,6 +86,7 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
 
         btnLogin.setOnClickListener(this);
         btnSendCode.setOnClickListener(this);
+        tvTestLogin.setOnClickListener(this);
 
 
         String getstring = SpUtils.getInstance().getstring(Constants.SP_PHONE, "");
@@ -103,7 +104,37 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
             case R.id.btn_login:
                 login();
                 break;
+            case R.id.tv_test_login:
+                login2();
+                break;
         }
+    }
+
+    private void login2() {
+        final String phone = etPhone.getText().toString().trim();
+        if(TextUtils.isEmpty(phone)){
+            Toast.makeText(this, R.string.text_login_phone_null, Toast.LENGTH_SHORT).show();
+        }
+
+        lodingView.show("正在登录......");
+
+        BmobManager.getInstance().LoginByPas(phone, "123456", new LogInListener<IMUser>() {
+            @Override
+            public void done(IMUser imUser, BmobException e) {
+                if(e == null){
+                    lodingView.hide();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    SpUtils.getInstance().putstring(Constants.SP_PHONE,phone);
+                    finish();
+                }else {
+                    if (e.getErrorCode() == 207) {
+                        Toast.makeText(LoginActivity.this, getString(R.string.text_test_login_fail), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "ERROR:" + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     private void login() {
@@ -112,8 +143,8 @@ public class LoginActivity extends BaseUiActivity implements View.OnClickListene
             Toast.makeText(this, R.string.text_login_phone_null, Toast.LENGTH_SHORT).show();
         }
         String code = etCode.getText().toString().trim();
-        if(TextUtils.isEmpty(phone)){
-            Toast.makeText(this, R.string.text_login_phone_null, Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(code)){
+            Toast.makeText(this, R.string.text_login_code_null, Toast.LENGTH_SHORT).show();
         }
 
         lodingView.show("正在登录......");

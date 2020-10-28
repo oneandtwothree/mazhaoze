@@ -51,6 +51,9 @@ public class BmobManager {
     public void signorLoginByMyPhone(String phone, String code, LogInListener<IMUser> logInListener){
         BmobUser.signOrLoginByMobilePhone(phone,code,logInListener);
     }
+    public void LoginByPas(String name,String word,LogInListener<IMUser> logInListener){
+        BmobUser.loginByAccount(name, word,logInListener );
+    }
 
     public void uploadFirstPhoto(final String name, File file, final Onupload onupload){
         final IMUser user = getUser();

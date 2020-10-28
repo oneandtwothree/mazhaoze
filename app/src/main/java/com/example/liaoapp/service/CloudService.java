@@ -157,6 +157,10 @@ public class CloudService extends Service {
                 EventManager.post(event);
 
             }
+
+                MessageEvent event = new MessageEvent(EventManager.FLAG_UPDATE_FRIEND_LIST);
+                EventManager.post(event);
+
                 return false;
             }
         });

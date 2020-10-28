@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:textColor="#9C9C9C"
                 android:ellipsize="marquee"
                 android:gravity="center_vertical"
                 android:marqueeRepeatLimit="marquee_forever"

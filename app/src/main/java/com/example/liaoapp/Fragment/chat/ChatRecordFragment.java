@@ -208,7 +208,7 @@ public class ChatRecordFragment extends BaseFragment implements SwipeRefreshLayo
     public void onMessageEvent(MessageEvent event) {
         switch (event.getType()) {
             case EventManager.FLAG_UPDATE_FRIEND_LIST:
-                if (mChatRecordRefreshLayout.isRefreshing()) {
+                if (!mChatRecordRefreshLayout.isRefreshing()) {
                     queryChatRecord();
                 }
                 break;

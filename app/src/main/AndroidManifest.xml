@@ -60,7 +60,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Activity.LocationActivity" android:launchMode="singleTask"/>
 
-        <service android:name=".service.CloudService" />
+        <service android:name=".service.CloudService" android:exported="true"/>
 
 
         <meta-data android:name="com.amap.api.v2.apikey"
