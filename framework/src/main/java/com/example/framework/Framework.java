@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
+import com.example.framework.helper.WindowHelper;
 import com.example.framework.manager.MapManager;
 import com.example.framework.manager.VoiceManager;
 import com.example.framework.utils.LogUtils;
@@ -35,5 +36,8 @@ public class Framework {
         CloudManager.getInstance().initCloud(mContext);
         LitePal.initialize(mContext);
         MapManager.getInstance().initMap(mContext);
+        WindowHelper.getInstance().initWindow(mContext);
+
+
     }
 }

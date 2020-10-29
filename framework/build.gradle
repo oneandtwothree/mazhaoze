@@ -71,4 +71,5 @@ dependencies {
     api 'com.amap.api:search:latest.integration'
     api 'com.amap.api:location:latest.integration'
     api files('libs/Msc.jar')
+    api project(path: ':CallLib')
 }

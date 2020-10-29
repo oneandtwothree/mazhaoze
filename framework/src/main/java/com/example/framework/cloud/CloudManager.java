@@ -2,17 +2,21 @@ package com.example.framework.cloud;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.example.framework.R;
 import com.example.framework.utils.LogUtils;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
+import io.rong.calllib.IRongCallListener;
+import io.rong.calllib.IRongReceivedCallListener;
+import io.rong.calllib.RongCallClient;
+import io.rong.calllib.RongCallCommon;
 import io.rong.imlib.IRongCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
@@ -28,8 +32,6 @@ public class CloudManager {
     public static final String CLOUD_KEY = "8luwapkv848bl";
     public static final String CLOUD_SECRET = "nk2hOm5FhSG";
 
-
-
     public static final String MSG_TEXT_NAME = "RC:TxtMsg";
     public static final String MSG_IMAGE_NAME = "RC:ImgMsg";
     public static final String MSG_LOCATION_NAME = "RC:LBSMsg";
@@ -38,6 +40,15 @@ public class CloudManager {
     public static final String TYPE_TEXT = "TYPE_TEXT";
     public static final String TYPE_ADD_FRIEND = "TYPE_ADD_FRIEND";
     public static final String TYPE_ARGEED_FRIEND = "TYPE_ARGEED_FRIEND";
+
+
+
+    //来电铃声
+    public static final String callAudioPath = "http://downsc.chinaz.net/Files/DownLoad/sound1/201501/5363.wav";
+    //挂断铃声
+    public static final String callAudioHangup = "http://downsc.chinaz.net/Files/DownLoad/sound1/201501/5351.wav";
+
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
     public CloudManager() {
     }
@@ -85,6 +96,11 @@ public class CloudManager {
         RongIMClient.getInstance().logout();
     }
 
+    public boolean isConnect() {
+        return RongIMClient.getInstance().getCurrentConnectionStatus()
+                == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED;
+    }
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
     public void setReceiveMessage(RongIMClient.OnReceiveMessageListener listener){
         RongIMClient.setOnReceiveMessageListener(listener);
@@ -177,8 +193,6 @@ public class CloudManager {
         }
     };
 
-
-
     public void sendImageMessage(String id,File file){
         ImageMessage obtain = ImageMessage.obtain(Uri.fromFile(file), Uri.fromFile(file), true);
         RongIMClient.getInstance().sendImageMessage(Conversation.ConversationType.PRIVATE,id,obtain,null,null,sendImageMessageCallback);
@@ -191,5 +205,88 @@ public class CloudManager {
                 null, null, iSendMessageCallback);
     }
 
+    //------------------------------------------------------------------------------------------------------------------------------------------
 
+    public void startCall(Context mContext,String id, RongCallCommon.CallMediaType mediaType){
+        if (!isVoIPEnabled(mContext)) {
+            return;
+        }
+        if(!isConnect()){
+            Toast.makeText(mContext, mContext.getString(R.string.text_server_status), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        List<String> userids = new ArrayList<>();
+        userids.add(id);
+        RongCallClient.getInstance().startCall(
+                Conversation.ConversationType.PRIVATE,
+                id,
+                userids,
+                null,
+                mediaType,
+                null
+        );
+    }
+
+    public void startAudioCall(Context mContext,String id){
+        if (!isVoIPEnabled(mContext)) {
+            return;
+        }
+        startCall(mContext,id,RongCallCommon.CallMediaType.AUDIO);
+    }
+    public void startVideoCall(Context mContext,String id){
+        if (!isVoIPEnabled(mContext)) {
+            return;
+        }
+        startCall(mContext,id,RongCallCommon.CallMediaType.VIDEO);
+    }
+
+
+    public void setReceivedCallListener(IRongReceivedCallListener listener){
+        if (null == listener) {
+            return;
+        }
+        RongCallClient.setReceivedCallListener(listener);
+    }
+    //拨打
+    public void acceptCall(String Callid){
+        RongCallClient.getInstance().acceptCall(Callid);
+    }
+    //挂断
+    public void hangUpCall(String Callid){
+        RongCallClient.getInstance().hangUpCall(Callid);
+    }
+    //切换媒体
+    public void changeCallMediaType(RongCallCommon.CallMediaType mediaType){
+        RongCallClient.getInstance().changeCallMediaType(mediaType);
+    }
+    //切换摄像头
+    public void switchCamera(){
+        RongCallClient.getInstance().switchCamera();
+    }
+    //摄像头开关
+    public void setEnableLocalVideo(boolean enabled){
+        RongCallClient.getInstance().setEnableLocalVideo(enabled);
+    }
+    //音频开关
+    public void setEnableLocalAudio(boolean enabled){
+        RongCallClient.getInstance().setEnableLocalAudio(enabled);
+    }
+    //免提开关
+    public void setEnableSpeakerphone(boolean enabled){
+        RongCallClient.getInstance().setEnableSpeakerphone(enabled);
+    }
+    // 监听通话状态
+    public void setVoIPCallListener(IRongCallListener listener) {
+        if (null == listener) {
+            return;
+        }
+        RongCallClient.getInstance().setVoIPCallListener(listener);
+    }
+    public boolean isVoIPEnabled(Context mContext) {
+        if (!RongCallClient.getInstance().isVoIPEnabled(mContext)) {
+            Toast.makeText(mContext, mContext.getString(R.string.text_devices_not_supper_audio), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 }
