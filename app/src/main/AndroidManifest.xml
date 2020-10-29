@@ -16,9 +16,11 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoodleAppIndexingWarning">
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="ratio_float" />
+
+        <!--OPPO-->
+        <meta-data android:name="android.max_aspect" android:value="2.2"/>
+        <!--小米适配-->
+        <meta-data android:name="notch.config" android:value="portrait|landscape"/>
 
 
         <activity

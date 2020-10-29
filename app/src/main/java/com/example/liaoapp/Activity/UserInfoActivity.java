@@ -38,6 +38,7 @@ import java.util.List;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.calllib.RongCallCommon;
 
 public class UserInfoActivity extends BaseUiActivity implements View.OnClickListener {
 
@@ -232,9 +233,10 @@ public class UserInfoActivity extends BaseUiActivity implements View.OnClickList
                 ChatActivity.startActivity(UserInfoActivity.this,userid,imUser.getNickName(),imUser.getPhoto());
                 break;
             case R.id.btn_audio_chat:
-
+                CloudManager.getInstance().startAudioCall(this,userid);
                 break;
             case R.id.btn_video_chat:
+                CloudManager.getInstance().startVideoCall(this,userid);
                 break;
         }
     }
