@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,13 +85,29 @@ public class CloudService extends Service implements View.OnClickListener {
     private ImageView audioIvHf;
     private ImageView audioIvSmall;
 
+    private RelativeLayout videoBigVideo;
+    private RelativeLayout videoSmallVideo;
+    private LinearLayout videoLlInfo;
+    private CircleImageView videoIvPhoto;
+    private TextView videoTvName;
+    private TextView videoTvStatus;
+    private TextView videoTvTime;
+    private LinearLayout videoLlAnswer;
+    private LinearLayout videoLlHangup;
+
+
     private View AudioView;
+    private View VideoView;
     private String callId;
 
     private MediaPlayerManager mediaAutioCall;
     private MediaPlayerManager mediaAutioHangup;
 
+    private SurfaceView mlocalView;
+    private SurfaceView mRemoteView;
+
     private boolean isSpeaker = false;
+    private boolean isSmallShow = false;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -100,6 +117,7 @@ public class CloudService extends Service implements View.OnClickListener {
                     callTimer++;
                     String time = TimeUtils.formatDuring(callTimer * 1000);
                     audioTvStatus.setText(time);
+                    videoTvTime.setText(time);
                     handler.sendEmptyMessageDelayed(H_TIME_WHAT,1000);
                     break;
             }
@@ -122,6 +140,9 @@ public class CloudService extends Service implements View.OnClickListener {
     }
 
     private void initService() {
+
+        EventManager.register(this);
+
         mediaAutioCall = new MediaPlayerManager();
         mediaAutioHangup = new MediaPlayerManager();
 
@@ -156,6 +177,21 @@ public class CloudService extends Service implements View.OnClickListener {
         audioLlHf.setOnClickListener(this);
         audioIvSmall.setOnClickListener(this);
 
+
+        VideoView = WindowHelper.getInstance().getview(R.layout.layout_chat_video);
+        videoBigVideo = VideoView.findViewById(R.id.video_big_video);
+        videoSmallVideo = VideoView.findViewById(R.id.video_small_video);
+        videoLlInfo = VideoView.findViewById(R.id.video_ll_info);
+        videoIvPhoto = VideoView.findViewById(R.id.video_iv_photo);
+        videoTvName = VideoView.findViewById(R.id.video_tv_name);
+        videoTvStatus = VideoView.findViewById(R.id.video_tv_status);
+        videoTvTime = VideoView.findViewById(R.id.video_tv_time);
+        videoLlAnswer = VideoView.findViewById(R.id.video_ll_answer);
+        videoLlHangup = VideoView.findViewById(R.id.video_ll_hangup);
+
+        videoLlAnswer.setOnClickListener(this);
+        videoLlHangup.setOnClickListener(this);
+        videoSmallVideo.setOnClickListener(this);
     }
 
     private void linkcloudServer() {
@@ -269,12 +305,15 @@ public class CloudService extends Service implements View.OnClickListener {
                 }
                 String callerUserId = rongCallSession.getCallerUserId();
                 callId = rongCallSession.getCallId();
-                updateWindowInfo(1,callerUserId);
+
+                mediaAutioCall.startPlay(CloudManager.callAudioPath);
+                updateWindowInfo(1,rongCallSession.getMediaType(),callerUserId);
 
                 if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
                     WindowHelper.getInstance().showview(AudioView);
+
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
-                    LogUtils.i("视频通话");
+                    WindowHelper.getInstance().showview(VideoView);
                 }
             }
 
@@ -295,13 +334,15 @@ public class CloudService extends Service implements View.OnClickListener {
                 LogUtils.i("onCallOutgoing");
 
                 String targetId = rongCallSession.getTargetId();
-                updateWindowInfo(0,targetId);
-
                 callId = rongCallSession.getCallId();
+
+                updateWindowInfo(0,rongCallSession.getMediaType(),targetId);
                 if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
                     WindowHelper.getInstance().showview(AudioView);
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
-
+                    WindowHelper.getInstance().showview(VideoView);
+                    mlocalView  = surfaceView;
+                    videoBigVideo.addView(mlocalView);
                 }
             }
 
@@ -312,12 +353,15 @@ public class CloudService extends Service implements View.OnClickListener {
                 if(mediaAutioCall.isPlaying()){
                     mediaAutioCall.stopPlay();
                 }
-                handler.sendEmptyMessage(H_TIME_WHAT);
-                if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
 
+
+                handler.sendEmptyMessage(H_TIME_WHAT);
+
+                if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
                     goneAudioView(true,false,true,true,true);
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
-
+                    goneVideoView(false,true,true,false,true,true);
+                    mlocalView = surfaceView;
                 }
 
 
@@ -326,6 +370,8 @@ public class CloudService extends Service implements View.OnClickListener {
             @Override
             public void onCallDisconnected(RongCallSession rongCallSession, RongCallCommon.CallDisconnectedReason callDisconnectedReason) {
                 LogUtils.i("onCallDisconnected ");
+                String callUserId = rongCallSession.getCallerUserId();
+                String recevierId = rongCallSession.getTargetId();
 
                 handler.removeMessages(H_TIME_WHAT);
                 callTimer = 0;
@@ -334,9 +380,9 @@ public class CloudService extends Service implements View.OnClickListener {
                 mediaAutioHangup.startPlay(CloudManager.callAudioHangup);
 
                 if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
-                        WindowHelper.getInstance().hideview(AudioView);
+                    WindowHelper.getInstance().hideview(AudioView);
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
-
+                    WindowHelper.getInstance().hideview(VideoView);
                 }
             }
 
@@ -347,7 +393,9 @@ public class CloudService extends Service implements View.OnClickListener {
 
             @Override
             public void onRemoteUserJoined(String s, RongCallCommon.CallMediaType callMediaType, int i, SurfaceView surfaceView) {
-
+                MessageEvent messageEvent = new MessageEvent(EventManager.FLAG_SEND_CAMERA_VIEW);
+                messageEvent.setmSurfaceView(surfaceView);
+                EventManager.post(messageEvent);
             }
 
             @Override
@@ -427,16 +475,31 @@ public class CloudService extends Service implements View.OnClickListener {
         audioIvSmall.setVisibility(small ? View.VISIBLE : View.GONE);
 
     }
+    private void goneVideoView(boolean info,boolean small,boolean big,boolean answer,boolean hanguo,boolean time){
+        videoLlInfo.setVisibility(info ? View.VISIBLE : View.GONE);
+        videoBigVideo.setVisibility(big ? View.VISIBLE : View.GONE);
+        videoSmallVideo.setVisibility(small ? View.VISIBLE : View.GONE);
+        videoLlAnswer.setVisibility(answer ? View.VISIBLE : View.GONE);
+        videoLlHangup.setVisibility(hanguo ? View.VISIBLE : View.GONE);
+        videoTvTime.setVisibility(time ? View.VISIBLE : View.GONE);
 
+    }
 
-    private void updateWindowInfo(final int index, String callerUserId) {
-
-        if(index == 1){
-            goneAudioView(false,true,true,false,false);
-            mediaAutioCall.startPlay(CloudManager.callAudioPath);
-        }else if(index == 0){
-            goneAudioView(false,false,true,false,false);
+    private void updateWindowInfo(final int index, final RongCallCommon.CallMediaType type, String callerUserId) {
+        if(type.equals(RongCallCommon.CallMediaType.AUDIO)){
+            if(index == 1){
+                goneAudioView(false,true,true,false,false);
+            }else if(index == 0){
+                goneAudioView(false,false,true,false,false);
+            }
+        }else if(type.equals(RongCallCommon.CallMediaType.VIDEO)){
+            if(index == 1){
+                goneVideoView(true,false,false,true,true,false);
+            }else if(index == 0){
+                goneVideoView(true,false,true,false,true,false);
+            }
         }
+
 
         BmobManager.getInstance().queryidFriend(callerUserId, new FindListener<IMUser>() {
             @Override
@@ -444,11 +507,22 @@ public class CloudService extends Service implements View.OnClickListener {
                 if(e == null){
                     if(CommonUtils.isEmpty(list)){
                         IMUser imUser = list.get(0);
-                        GlideHelper.setimg(CloudService.this,imUser.getPhoto(),audioIvPhoto);
-                        if(index == 1){
-                            audioTvStatus.setText(imUser.getNickName() + getString(R.string.text_service_calling));
-                        }else if(index == 0){
-                            audioTvStatus.setText(getString(R.string.text_service_call_ing) + imUser.getNickName() + "...");
+
+                        if(type.equals(RongCallCommon.CallMediaType.AUDIO)){
+                            GlideHelper.setimg(CloudService.this,imUser.getPhoto(),audioIvPhoto);
+                            if(index == 1){
+                                audioTvStatus.setText(imUser.getNickName() + getString(R.string.text_service_calling));
+                            }else if(index == 0){
+                                audioTvStatus.setText(getString(R.string.text_service_call_ing) + imUser.getNickName() + "...");
+                            }
+                        }else if (type.equals(RongCallCommon.CallMediaType.VIDEO)) {
+                            GlideHelper.setimg(CloudService.this, imUser.getPhoto(), videoIvPhoto);
+                            videoTvName.setText(imUser.getNickName());
+                            if (index == 1) {
+                                videoTvStatus.setText(imUser.getNickName() + getString(R.string.text_service_video_calling));
+                            } else if (index == 0) {
+                                videoTvStatus.setText(getString(R.string.text_service_call_video_ing) + imUser.getNickName() + "...");
+                            }
                         }
                     }
                 }
@@ -456,7 +530,33 @@ public class CloudService extends Service implements View.OnClickListener {
         });
     }
 
-   @Override
+    private void updateVideoview() {
+            videoBigVideo.removeAllViews();
+            videoSmallVideo.removeAllViews();
+            if(isSmallShow){
+                if(mlocalView != null){
+                    videoSmallVideo.addView(mlocalView);
+                    mlocalView.setZOrderOnTop(true);
+                }
+                if(mRemoteView != null){
+                    videoBigVideo.addView(mRemoteView);
+                    mRemoteView.setZOrderOnTop(false);
+                }
+            }else {
+                if(mlocalView != null){
+                    videoBigVideo.addView(mlocalView);
+                    mlocalView.setZOrderOnTop(false);
+                }
+                if(mRemoteView != null){
+                    videoSmallVideo.addView(mRemoteView);
+                    mRemoteView.setZOrderOnTop(true);
+                }
+            }
+    }
+
+
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.audio_ll_recording:
@@ -470,12 +570,46 @@ public class CloudService extends Service implements View.OnClickListener {
                 break;
             case R.id.audio_ll_hf:
                     isSpeaker = !isSpeaker;
-                CloudManager.getInstance().setEnableSpeakerphone(isSpeaker);
+                    CloudManager.getInstance().setEnableSpeakerphone(isSpeaker);
                     audioIvHf.setImageResource(isSpeaker?R.drawable.img_hf_p:R.drawable.img_hf);
-                CloudManager.getInstance().setEnableSpeakerphone(isSpeaker);
                 break;
             case R.id.audio_iv_small:
                 break;
+            case R.id.video_ll_answer:
+                CloudManager.getInstance().acceptCall(callId);
+                break;
+            case R.id.video_ll_hangup:
+                CloudManager.getInstance().hangUpCall(callId);
+                break;
+            case R.id.video_small_video:
+                isSmallShow = !isSmallShow;
+                updateVideoview();
+                break;
         }
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent messageEvent){
+        switch (messageEvent.getType()){
+            case EventManager.FLAG_SEND_CAMERA_VIEW:
+
+                SurfaceView surfaceView = messageEvent.getmSurfaceView();
+                if(surfaceView != null){
+                    mRemoteView = surfaceView;
+                }
+                updateVideoview();
+                break;
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(disposable.isDisposed()){
+            disposable.dispose();
+        }
+        EventManager.unregister(this);
     }
 }
