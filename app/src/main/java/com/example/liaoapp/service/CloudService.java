@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.Layout;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
@@ -68,7 +71,6 @@ public class CloudService extends Service implements View.OnClickListener {
     private int callTimer = 0;
 
     private boolean isMove = false;
-    //是否拖拽
     private boolean isDrag = false;
     private int mLastX;
     private int mLastY;
@@ -96,8 +98,12 @@ public class CloudService extends Service implements View.OnClickListener {
     private LinearLayout videoLlHangup;
 
 
+    private TextView mSmallTime;
+    private LinearLayout mSmallLayout;
+
     private View AudioView;
     private View VideoView;
+    private View smallAudioView;
     private String callId;
 
     private MediaPlayerManager mediaAutioCall;
@@ -105,6 +111,8 @@ public class CloudService extends Service implements View.OnClickListener {
 
     private SurfaceView mlocalView;
     private SurfaceView mRemoteView;
+
+    private WindowManager.LayoutParams lp;
 
     private boolean isSpeaker = false;
     private boolean isSmallShow = false;
@@ -118,6 +126,7 @@ public class CloudService extends Service implements View.OnClickListener {
                     String time = TimeUtils.formatDuring(callTimer * 1000);
                     audioTvStatus.setText(time);
                     videoTvTime.setText(time);
+                    mSmallTime.setText(time);
                     handler.sendEmptyMessageDelayed(H_TIME_WHAT,1000);
                     break;
             }
@@ -192,6 +201,72 @@ public class CloudService extends Service implements View.OnClickListener {
         videoLlAnswer.setOnClickListener(this);
         videoLlHangup.setOnClickListener(this);
         videoSmallVideo.setOnClickListener(this);
+
+        createSmallAudioView();
+
+    }
+
+    private void createSmallAudioView() {
+
+        lp = WindowHelper.getInstance().createLayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, Gravity.TOP|Gravity.LEFT);
+
+        smallAudioView = WindowHelper.getInstance().getview(R.layout.layout_chat_small_audio);
+        mSmallTime = smallAudioView.findViewById(R.id.mSmallTime);
+        mSmallLayout = smallAudioView.findViewById(R.id.mSmallLayout);
+
+        smallAudioView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WindowHelper.getInstance().hideview(smallAudioView);
+                WindowHelper.getInstance().showview(AudioView);
+            }
+        });
+
+        smallAudioView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int startX = (int) event.getRawX();
+                int startY = (int) event.getRawY();
+
+
+
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        isMove = false;
+                        isDrag = false;
+
+                        mLastX = (int) event.getRawX();
+                        mLastY = (int) event.getRawY();
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        int dx = startX - mLastX;
+                        int dy = startY - mLastY;
+
+                        if(isMove){
+                            isDrag = true;
+                        }else {
+                            if(dx == 0 && dy ==0){
+                                isMove = false;
+                            }else{
+                                isMove = true;
+                                isDrag = true;
+                            }
+                        }
+
+                        lp.x += dx;
+                        lp.y += dy;
+
+                        mLastX = startX;
+                        mLastY = startY;
+
+                        WindowHelper.getInstance().updateview(smallAudioView,lp);
+                        break;
+                }
+                return isDrag;
+            }
+        });
     }
 
     private void linkcloudServer() {
@@ -381,6 +456,7 @@ public class CloudService extends Service implements View.OnClickListener {
 
                 if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
                     WindowHelper.getInstance().hideview(AudioView);
+                    WindowHelper.getInstance().hideview(smallAudioView);
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
                     WindowHelper.getInstance().hideview(VideoView);
                 }
@@ -574,6 +650,8 @@ public class CloudService extends Service implements View.OnClickListener {
                     audioIvHf.setImageResource(isSpeaker?R.drawable.img_hf_p:R.drawable.img_hf);
                 break;
             case R.id.audio_iv_small:
+                WindowHelper.getInstance().hideview(AudioView);
+                WindowHelper.getInstance().showview(smallAudioView,lp);
                 break;
             case R.id.video_ll_answer:
                 CloudManager.getInstance().acceptCall(callId);

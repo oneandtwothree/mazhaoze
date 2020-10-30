@@ -92,6 +92,22 @@ public class WindowHelper {
             }
         }
     }
+    public void showview(final View view,final WindowManager.LayoutParams layoutParams){
+        if(view != null){
+            if(view.getParent() ==  null){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            wm.addView(view, layoutParams);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
+    }
     public void hideview(final View view){
         if(view != null){
             if(view.getParent() !=  null){
