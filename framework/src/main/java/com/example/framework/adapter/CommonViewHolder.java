@@ -55,9 +55,20 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         GlideHelper.setimg(context,file,view);
         return this;
     }
+    public CommonViewHolder setImageResource(int viewId, int resId) {
+        ImageView iv = getView(viewId);
+        iv.setImageResource(resId);
+        return this;
+    }
+
     public CommonViewHolder setImgsex(int viewid, int resid){
         ImageView view = getView(viewid);
         view.setImageResource(resid);
+        return this;
+    }
+    public CommonViewHolder setTextColor(int viewId, int color) {
+        TextView tv = getView(viewId);
+        tv.setTextColor(color);
         return this;
     }
 

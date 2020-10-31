@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.cloud.CloudManager;
+import com.example.framework.db.CallRecord;
 import com.example.framework.db.LitePalHelper;
 import com.example.framework.db.NewFriend;
 import com.example.framework.entity.Constants;
@@ -116,6 +117,14 @@ public class CloudService extends Service implements View.OnClickListener {
 
     private boolean isSpeaker = false;
     private boolean isSmallShow = false;
+
+
+    //拨打状态
+    private int isCallTo = 0;
+    //接听状态
+    private int isReceiverTo = 0;
+    //拨打还是接听
+    private boolean isCallOrReceiver = true;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -390,6 +399,11 @@ public class CloudService extends Service implements View.OnClickListener {
                 }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
                     WindowHelper.getInstance().showview(VideoView);
                 }
+
+
+                isReceiverTo = 1;
+
+                isCallOrReceiver = false;
             }
 
             @Override
@@ -408,6 +422,8 @@ public class CloudService extends Service implements View.OnClickListener {
             public void onCallOutgoing(RongCallSession rongCallSession, SurfaceView surfaceView) {
                 LogUtils.i("onCallOutgoing");
 
+                isCallTo = 1;
+                isCallOrReceiver = true;
                 String targetId = rongCallSession.getTargetId();
                 callId = rongCallSession.getCallId();
 
@@ -428,7 +444,8 @@ public class CloudService extends Service implements View.OnClickListener {
                 if(mediaAutioCall.isPlaying()){
                     mediaAutioCall.stopPlay();
                 }
-
+                isCallTo = 2;
+                isReceiverTo  = 2;
 
                 handler.sendEmptyMessage(H_TIME_WHAT);
 
@@ -454,12 +471,45 @@ public class CloudService extends Service implements View.OnClickListener {
                 mediaAutioCall.pausePlay();
                 mediaAutioHangup.startPlay(CloudManager.callAudioHangup);
 
-                if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)){
-                    WindowHelper.getInstance().hideview(AudioView);
-                    WindowHelper.getInstance().hideview(smallAudioView);
-                }else if(rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)){
-                    WindowHelper.getInstance().hideview(VideoView);
+                if (rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.AUDIO)) {
+                    if (isCallOrReceiver) {
+                        if (isCallTo == 1) {
+                            //代表只拨打，但是并没有接通
+                            saveAudioRecord(recevierId, CallRecord.CALL_STATUS_DIAL);
+                        } else if (isCallTo == 2) {
+                            saveAudioRecord(recevierId, CallRecord.CALL_STATUS_ANSWER);
+                        }
+                    } else {
+                        if (isReceiverTo == 1) {
+                            saveAudioRecord(callUserId, CallRecord.CALL_STATUS_UN_ANSWER);
+                        } else if (isReceiverTo == 2) {
+                            saveAudioRecord(callUserId, CallRecord.CALL_STATUS_ANSWER);
+                        }
+                    }
+
+                } else if (rongCallSession.getMediaType().equals(RongCallCommon.CallMediaType.VIDEO)) {
+                    if (isCallOrReceiver) {
+                        if (isCallTo == 1) {
+                            //代表只拨打，但是并没有接通
+                            saveVideoRecord(recevierId, CallRecord.CALL_STATUS_DIAL);
+                        } else if (isCallTo == 2) {
+                            saveVideoRecord(recevierId, CallRecord.CALL_STATUS_ANSWER);
+                        }
+                    } else {
+                        if (isReceiverTo == 1) {
+                            saveVideoRecord(callUserId, CallRecord.CALL_STATUS_UN_ANSWER);
+                        } else if (isReceiverTo == 2) {
+                            saveVideoRecord(callUserId, CallRecord.CALL_STATUS_ANSWER);
+                        }
+                    }
                 }
+                WindowHelper.getInstance().hideview(AudioView);
+                WindowHelper.getInstance().hideview(smallAudioView);
+                WindowHelper.getInstance().hideview(VideoView);
+
+                isCallTo = 0;
+                isReceiverTo  = 0;
+
             }
 
             @Override
@@ -543,6 +593,9 @@ public class CloudService extends Service implements View.OnClickListener {
     }
 
 
+
+
+
     private void goneAudioView(boolean recording,boolean answer,boolean hangup,boolean hf,boolean small){
         audioLlRecording.setVisibility(recording ? View.VISIBLE : View.GONE);
         audioLlAnswer.setVisibility(answer ? View.VISIBLE : View.GONE);
@@ -560,6 +613,16 @@ public class CloudService extends Service implements View.OnClickListener {
         videoTvTime.setVisibility(time ? View.VISIBLE : View.GONE);
 
     }
+    private void saveAudioRecord(String id, int callStatus) {
+        LitePalHelper.getInstance()
+                .saveCallRecord(id, CallRecord.MEDIA_TYPE_AUDIO, callStatus);
+    }
+
+    private void saveVideoRecord(String id, int callStatus) {
+        LitePalHelper.getInstance()
+                .saveCallRecord(id, CallRecord.MEDIA_TYPE_VIDEO, callStatus);
+    }
+
 
     private void updateWindowInfo(final int index, final RongCallCommon.CallMediaType type, String callerUserId) {
         if(type.equals(RongCallCommon.CallMediaType.AUDIO)){

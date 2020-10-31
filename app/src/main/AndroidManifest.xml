@@ -61,6 +61,8 @@
         <activity android:name=".Activity.ImagePreviewActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Activity.LocationActivity" android:launchMode="singleTask"/>
+        <activity android:name=".Activity.PrivateSetActivity" android:label="@string/app_name"/>
+
 
         <service android:name=".service.CloudService" android:exported="true"/>
 

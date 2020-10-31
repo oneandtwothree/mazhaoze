@@ -16,6 +16,7 @@ import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.utils.GlideHelper;
 import com.example.liaoapp.Activity.NewFriendActivity;
+import com.example.liaoapp.Activity.PrivateSetActivity;
 import com.example.liaoapp.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,7 +31,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout llNewFriend;
     private LinearLayout llPrivateSet;
     private LinearLayout llShare;
-    private LinearLayout llNotice;
     private LinearLayout llSetting;
 
 
@@ -51,7 +51,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         llNewFriend = view.findViewById(R.id.ll_new_friend);
         llPrivateSet = view.findViewById(R.id.ll_private_set);
         llShare = view.findViewById(R.id.ll_share);
-        llNotice = view.findViewById(R.id.ll_notice);
         llSetting = view.findViewById(R.id.ll_setting);
 
 
@@ -59,7 +58,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         llNewFriend.setOnClickListener(this);
         llPrivateSet.setOnClickListener(this);
         llShare.setOnClickListener(this);
-        llNotice.setOnClickListener(this);
         llSetting.setOnClickListener(this);
 
         loadMeInfo();
@@ -83,10 +81,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), NewFriendActivity.class));
                 break;
             case R.id.ll_private_set:
-                 break;
-            case R.id.ll_share:
+                startActivity(new Intent(getActivity(), PrivateSetActivity.class));
                 break;
-            case R.id.ll_notice:
+            case R.id.ll_share:
                 break;
             case R.id.ll_setting:
                 break;

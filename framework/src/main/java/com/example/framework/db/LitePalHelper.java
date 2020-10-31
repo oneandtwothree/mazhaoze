@@ -35,7 +35,14 @@ public class LitePalHelper {
         newFriend.setSaveTime(System.currentTimeMillis());
         basesave(newFriend);
     }
-
+    public void saveCallRecord(String userId, int mediaType, int callStatus) {
+        CallRecord callRecord = new CallRecord();
+        callRecord.setUserId(userId);
+        callRecord.setMediaType(mediaType);
+        callRecord.setCallStatus(callStatus);
+        callRecord.setCallTime(System.currentTimeMillis());
+        basesave(callRecord);
+    }
 
     public List<? extends LitePalSupport> basequery(Class cls){
         return LitePal.findAll(cls);
@@ -45,7 +52,9 @@ public class LitePalHelper {
     public List<NewFriend> querynewfriend(){
         return (List<NewFriend>)basequery(NewFriend.class);
     }
-
+    public List<CallRecord> queryCallRecord() {
+        return (List<CallRecord>) basequery(CallRecord.class);
+    }
     public void updateNewFriend(String usid,int agree){
         NewFriend newFriend = new NewFriend();
         newFriend.setIsAgree(agree);

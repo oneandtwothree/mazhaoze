@@ -93,6 +93,12 @@ public class BmobManager {
        basequery("objectId",id,listener);
     }
 
+    public void queryPrivateSet(FindListener<PrivateSet> listener){
+        BmobQuery<PrivateSet> objectBmobQuery = new BmobQuery<>();
+        objectBmobQuery.findObjects(listener);
+    }
+
+
     public void queryallFriend(FindListener<Friend> listener){
         BmobQuery<Friend> objectBmobQuery = new BmobQuery<>();
         objectBmobQuery.addWhereEqualTo("user",getUser());
@@ -110,6 +116,9 @@ public class BmobManager {
         bmobQuery.addWhereEqualTo(key,value);
         bmobQuery.findObjects(listener);
     }
+
+
+
 
     public void addFriend(IMUser imUser, SaveListener<String> listener) {
         Friend friend = new Friend();
@@ -130,6 +139,19 @@ public class BmobManager {
             }
         });
     }
+    public void addPrivateset(SaveListener<String> listener){
+        PrivateSet privateSet = new PrivateSet();
+        privateSet.setUserid(getUser().getObjectId());
+        privateSet.setPhone(getUser().getMobilePhoneNumber());
+        privateSet.save(listener);
+    }
+    public void delPrivateset(String id,UpdateListener listener){
+        PrivateSet privateSet = new PrivateSet();
+        privateSet.setObjectId(id);
+        privateSet.delete(listener);
+    }
+
+
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);
     }
