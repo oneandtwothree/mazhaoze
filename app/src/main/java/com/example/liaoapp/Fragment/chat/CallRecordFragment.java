@@ -24,6 +24,7 @@ import com.example.liaoapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.exception.BmobException;
@@ -159,6 +160,8 @@ public class CallRecordFragment extends BaseFragment implements SwipeRefreshLayo
 
                     }
                 });
+
+        Collections.reverse(mList);
     }
 
     @Override
