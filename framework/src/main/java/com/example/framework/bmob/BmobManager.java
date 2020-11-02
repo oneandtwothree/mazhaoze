@@ -109,6 +109,10 @@ public class BmobManager {
         BmobQuery<IMUser> objectBmobQuery = new BmobQuery<>();
         objectBmobQuery.findObjects(listener);
     }
+    public void queryFateSet(FindListener<FateSet> listener) {
+        BmobQuery<FateSet> query = new BmobQuery<>();
+        query.findObjects(listener);
+    }
 
 
     public void basequery(String key,String value,FindListener<IMUser> listener){
@@ -150,7 +154,17 @@ public class BmobManager {
         privateSet.setObjectId(id);
         privateSet.delete(listener);
     }
+    public void addFateSet(SaveListener<String> listener) {
+        FateSet set = new FateSet();
+        set.setUserId(getUser().getObjectId());
+        set.save(listener);
+    }
 
+    public void delFateSet(String id, UpdateListener listener) {
+        FateSet set = new FateSet();
+        set.setObjectId(id);
+        set.delete(listener);
+    }
 
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);

@@ -108,15 +108,15 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
             case R.id.btn_upload:
                 uploadPhoto();
                 break;
-            case R.id.btn_camera:
+            case R.id.tv_camera:
                 DiaLogManager.getInstance().hide(seltphoto);
                 FileHelper.getInstance().toCamera(this);
                 break;
-            case R.id.btn_album:
+            case R.id.tv_ablum:
                 DiaLogManager.getInstance().hide(seltphoto);
                 FileHelper.getInstance().toTu(this);
                 break;
-            case R.id.btn_cancel:
+            case R.id.tv_cancel:
                 DiaLogManager.getInstance().hide(seltphoto);
                 break;
         }
@@ -148,9 +148,9 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
     private void initPhotoView(){
         seltphoto = DiaLogManager.getInstance().initview(this, R.layout.dialog_select_photo, Gravity.BOTTOM);
 
-        btnCamera = seltphoto.findViewById(R.id.btn_camera);
-        btnAlbum = seltphoto.findViewById(R.id.btn_album);
-        btnCancel = seltphoto.findViewById(R.id.btn_cancel);
+        btnCamera = seltphoto.findViewById(R.id.tv_camera);
+        btnAlbum = seltphoto.findViewById(R.id.tv_ablum);
+        btnCancel = seltphoto.findViewById(R.id.tv_cancel);
 
         btnCamera.setOnClickListener(this);
         btnAlbum.setOnClickListener(this);

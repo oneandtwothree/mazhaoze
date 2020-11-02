@@ -1,4 +1,4 @@
-package com.example.framework.adapter;
+package com.example.liaoapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.framework.R;
+import com.example.framework.utils.GlideHelper;
+import com.example.liaoapp.model.StarModel;
 import com.moxun.tagcloudlib.view.TagsAdapter;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 public class CloudTagAdapter extends TagsAdapter {
 
     private Context context;
-    private List<String> mlist;
+    private List<StarModel> mlist;
     private LayoutInflater layoutInflater;
 
     private TextView tvStarName;
@@ -23,7 +25,7 @@ public class CloudTagAdapter extends TagsAdapter {
 
 
 
-    public CloudTagAdapter(Context context, List<String> mlist) {
+    public CloudTagAdapter(Context context, List<StarModel> mlist) {
         this.context = context;
         this.mlist = mlist;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -39,32 +41,10 @@ public class CloudTagAdapter extends TagsAdapter {
         View view = layoutInflater.inflate(R.layout.layout_star_view_item, null);
         tvStarName = view.findViewById(R.id.tv_star_name);
         ivStarIcon = view.findViewById(R.id.iv_star_icon);
+        StarModel starModel = mlist.get(position);
 
-        tvStarName.setText(mlist.get(position));
-        switch (position % 10){
-            case 0:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_1);
-                break;
-            case 1:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_2);
-                break;
-            case 2:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_3);
-                break;
-            case 3:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_4);
-                break;
-            case 4:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_5);
-                break;
-            case 5:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_6);
-                break;
-            default:
-                ivStarIcon.setImageResource(R.drawable.img_guide_star_7);
-                break;
-        }
-
+        GlideHelper.setimg(context,starModel.getPhotoUrl(),ivStarIcon);
+        tvStarName.setText(starModel.getNickName());
 
         return view;
     }

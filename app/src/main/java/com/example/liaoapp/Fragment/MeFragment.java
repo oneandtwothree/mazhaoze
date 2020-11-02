@@ -15,6 +15,7 @@ import com.example.framework.base.BaseFragment;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.utils.GlideHelper;
+import com.example.liaoapp.Activity.MeInfoActivity;
 import com.example.liaoapp.Activity.NewFriendActivity;
 import com.example.liaoapp.Activity.PrivateSetActivity;
 import com.example.liaoapp.Activity.ShareImgActivity;
@@ -77,6 +78,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_me_info:
+                startActivity(new Intent(getActivity(), MeInfoActivity.class));
                 break;
             case R.id.ll_new_friend:
                 startActivity(new Intent(getActivity(), NewFriendActivity.class));
