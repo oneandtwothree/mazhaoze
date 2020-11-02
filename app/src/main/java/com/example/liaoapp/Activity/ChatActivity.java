@@ -452,7 +452,7 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
         LogUtils.i("requestcode："+requestCode);
         if(resultCode == Activity.RESULT_OK){
             if(requestCode == FileHelper.CAMEAR_REQUEST_CODE){
-                upload  = FileHelper.getInstance().getTempfile();
+                upload  = FileHelper.getInstance().getTempFile();
             }else if(requestCode == FileHelper.ALBUM_REQUEST_CODE){
                 Uri uri = data.getData();
                 if(uri != null){

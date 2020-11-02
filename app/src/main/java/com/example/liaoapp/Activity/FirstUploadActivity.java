@@ -168,7 +168,7 @@ public class FirstUploadActivity extends BaseBackActivity implements View.OnClic
         LogUtils.i("requestcode："+requestCode);
         if(resultCode == Activity.RESULT_OK){
             if(requestCode == FileHelper.CAMEAR_REQUEST_CODE){
-                uploadfile  = FileHelper.getInstance().getTempfile();
+                uploadfile  = FileHelper.getInstance().getTempFile();
             }else if(requestCode == FileHelper.ALBUM_REQUEST_CODE){
                 Uri uri = data.getData();
                 if(uri != null){

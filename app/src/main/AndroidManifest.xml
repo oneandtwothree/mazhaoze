@@ -62,6 +62,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Activity.LocationActivity" android:launchMode="singleTask"/>
         <activity android:name=".Activity.PrivateSetActivity" android:label="@string/app_name"/>
+        <activity android:name=".Activity.QrCodeActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Activity.ShareImgActivity"/>
 
 
         <service android:name=".service.CloudService" android:exported="true"/>

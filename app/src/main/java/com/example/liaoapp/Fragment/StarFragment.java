@@ -2,6 +2,7 @@ package com.example.liaoapp.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,13 @@ import androidx.annotation.Nullable;
 
 import com.example.framework.adapter.CloudTagAdapter;
 import com.example.framework.base.BaseFragment;
+import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.Activity.AddFriendActivity;
+import com.example.liaoapp.Activity.QrCodeActivity;
+import com.example.liaoapp.Activity.UserInfoActivity;
 import com.example.liaoapp.R;
 import com.moxun.tagcloudlib.view.TagCloudView;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,8 @@ public class StarFragment extends BaseFragment implements View.OnClickListener{
 
     private List<String> mlist = new ArrayList<>();
     private CloudTagAdapter cloudTagAdapter;
+
+    private static final int REQUEST_CODE = 1235;
 
     @Nullable
     @Override
@@ -92,6 +99,8 @@ public class StarFragment extends BaseFragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_camera:
+                Intent intent = new Intent(getActivity(), QrCodeActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
                 break;
             case R.id.iv_add:
                 startActivity(new Intent(getActivity(), AddFriendActivity.class));
@@ -105,5 +114,42 @@ public class StarFragment extends BaseFragment implements View.OnClickListener{
             case R.id.ll_love:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    LogUtils.i("result：" + result);
+                    if (!TextUtils.isEmpty(result)) {
+                        //是我们自己的二维码
+                        if (result.startsWith("Meet")) {
+                            String[] split = result.split("#");
+                            LogUtils.i("split:" + split.toString());
+                            if (split != null && split.length >= 2) {
+                                try {
+                                    UserInfoActivity.startActivity(getActivity(), split[1]);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.text_toast_error_qrcode), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.text_toast_error_qrcode), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(getActivity(), getString(R.string.text_qrcode_fail), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

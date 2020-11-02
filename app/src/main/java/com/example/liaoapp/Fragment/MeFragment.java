@@ -17,6 +17,7 @@ import com.example.framework.bmob.IMUser;
 import com.example.framework.utils.GlideHelper;
 import com.example.liaoapp.Activity.NewFriendActivity;
 import com.example.liaoapp.Activity.PrivateSetActivity;
+import com.example.liaoapp.Activity.ShareImgActivity;
 import com.example.liaoapp.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,6 +85,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), PrivateSetActivity.class));
                 break;
             case R.id.ll_share:
+                startActivity(new Intent(getActivity(), ShareImgActivity.class));
                 break;
             case R.id.ll_setting:
                 break;

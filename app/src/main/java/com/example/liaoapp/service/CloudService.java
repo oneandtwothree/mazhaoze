@@ -748,9 +748,12 @@ public class CloudService extends Service implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(disposable.isDisposed()){
-            disposable.dispose();
+        if(null != disposable){
+            if(disposable.isDisposed()){
+                disposable.dispose();
+            }
         }
+
         EventManager.unregister(this);
     }
 }
