@@ -11,10 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.framework.entity.Constants;
-import com.example.framework.utils.GlideHelper;
-import com.example.framework.utils.LogUtils;
+import com.example.framework.helper.GlideHelper;
 import com.example.liaoapp.R;
 import com.example.liaoapp.model.AddFriendModel;
 

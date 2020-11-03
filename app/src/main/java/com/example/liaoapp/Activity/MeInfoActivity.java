@@ -30,14 +30,13 @@ import com.example.framework.bmob.DiaLogManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.event.EventManager;
 import com.example.framework.helper.FileHelper;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.view.DiaLogView;
 import com.example.framework.view.LodingView;
 import com.example.liaoapp.R;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

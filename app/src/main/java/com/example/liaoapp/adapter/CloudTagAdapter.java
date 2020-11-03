@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.framework.R;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.liaoapp.model.StarModel;
 import com.moxun.tagcloudlib.view.TagsAdapter;
 

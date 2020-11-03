@@ -20,10 +20,8 @@ import com.example.framework.base.BaseBackActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.utils.CommonUtils;
-import com.example.framework.utils.GlideHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.liaoapp.R;
-import com.example.liaoapp.adapter.AddFriendAdapter;
 import com.example.liaoapp.model.AddFriendModel;
 
 import java.util.ArrayList;

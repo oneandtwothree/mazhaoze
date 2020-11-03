@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.cloud.CloudManager;
+import com.example.framework.helper.NotificationHelper;
 import com.example.framework.helper.WindowHelper;
 import com.example.framework.manager.MapManager;
 import com.example.framework.manager.VoiceManager;
@@ -44,6 +45,6 @@ public class Framework {
         WindowHelper.getInstance().initWindow(mContext);
         CrashReport.initCrashReport(mContext, BUGLY_KEY, BuildConfig.LOG_DEBUG);
         ZXingLibrary.initDisplayOpinion(mContext);
-
+        NotificationHelper.getInstance().createChannel(mContext);
     }
 }

@@ -476,13 +476,13 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
                         public void poi2address(String address) {
                             //发送位置消息
                             CloudManager.getInstance().sendLocationMessage(youruserid, la, lo, address);
-                            addLocation(1, la, lo, address);
+                            addLocation(0, la, lo, address);
                         }
                     });
                 } else {
                     //发送位置消息
                     CloudManager.getInstance().sendLocationMessage(youruserid, la, lo, address);
-                    addLocation(1, la, lo, address);
+                    addLocation(0, la, lo, address);
                 }
 
             } else if (requestCode == CHAT_INFO_REQUEST_CODE) {
@@ -492,7 +492,7 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
 
         if(upload != null){
             CloudManager.getInstance().sendImageMessage(youruserid,upload);
-            addImage(1,upload);
+            addImage(0,upload);
             upload = null;
         }
 

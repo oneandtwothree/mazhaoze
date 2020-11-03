@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.framework.base.BaseUiActivity;
 import com.example.framework.entity.Constants;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.liaoapp.R;
 import com.github.chrisbanes.photoview.PhotoView;
 

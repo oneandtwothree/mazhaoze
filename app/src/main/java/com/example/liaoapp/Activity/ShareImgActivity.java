@@ -11,7 +11,7 @@ import com.example.framework.base.BaseBackActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.helper.FileHelper;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.framework.view.LodingView;
 import com.example.liaoapp.R;
 import com.uuzuche.lib_zxing.activity.CodeUtils;

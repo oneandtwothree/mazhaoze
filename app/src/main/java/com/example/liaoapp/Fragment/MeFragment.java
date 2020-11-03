@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.example.framework.base.BaseFragment;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.liaoapp.Activity.MeInfoActivity;
 import com.example.liaoapp.Activity.NewFriendActivity;
 import com.example.liaoapp.Activity.PrivateSetActivity;

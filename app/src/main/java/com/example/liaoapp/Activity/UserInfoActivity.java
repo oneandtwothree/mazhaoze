@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +25,7 @@ import com.example.framework.bmob.IMUser;
 import com.example.framework.cloud.CloudManager;
 import com.example.framework.entity.Constants;
 import com.example.framework.utils.CommonUtils;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.view.DiaLogView;
 import com.example.liaoapp.R;
@@ -38,7 +37,6 @@ import java.util.List;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.rong.calllib.RongCallCommon;
 
 public class UserInfoActivity extends BaseUiActivity implements View.OnClickListener {
 

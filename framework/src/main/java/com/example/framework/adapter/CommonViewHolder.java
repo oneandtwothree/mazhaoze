@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 
 import java.io.File;
 

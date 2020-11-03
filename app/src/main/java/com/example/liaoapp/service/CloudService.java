@@ -1,11 +1,12 @@
 package com.example.liaoapp.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -28,13 +29,17 @@ import com.example.framework.entity.Constants;
 import com.example.framework.event.EventManager;
 import com.example.framework.event.MessageEvent;
 import com.example.framework.gson.TextBean;
+import com.example.framework.helper.NotificationHelper;
 import com.example.framework.helper.WindowHelper;
 import com.example.framework.manager.MediaPlayerManager;
 import com.example.framework.utils.CommonUtils;
-import com.example.framework.utils.GlideHelper;
+import com.example.framework.helper.GlideHelper;
 import com.example.framework.utils.LogUtils;
 import com.example.framework.utils.SpUtils;
 import com.example.framework.utils.TimeUtils;
+import com.example.liaoapp.Activity.ChatActivity;
+import com.example.liaoapp.Activity.NewFriendActivity;
+import com.example.liaoapp.MainActivity;
 import com.example.liaoapp.R;
 import com.google.gson.Gson;
 
@@ -299,50 +304,44 @@ public class CloudService extends Service implements View.OnClickListener {
                         messageEvent.setText(textBean.getMsg());
                         messageEvent.setUserId(message.getSenderUserId());
                         EventManager.post(messageEvent);
+                        pushSystem(message.getSenderUserId(), 1, 0, 0, textBean.getMsg());
                     }else if(textBean.getType().equals(CloudManager.TYPE_ADD_FRIEND)){
+
+                        //存入数据库 Bmob RongCloud 都没有提供存储方法
+                        //使用另外的方法来实现 存入本地数据库
                         LogUtils.i("添加好友消息");
-
-                        disposable  = Observable.create(new ObservableOnSubscribe<List<NewFriend>>() {
-                            @Override
-                            public void subscribe(ObservableEmitter<List<NewFriend>> emitter) throws Exception {
-                                        emitter.onNext(LitePalHelper.getInstance().querynewfriend());
-                                        emitter.onComplete();
-                            }
-                        }).subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<List<NewFriend>>() {
-                                    @Override
-                                    public void accept(List<NewFriend> newFriends) throws Exception {
-                                            if(CommonUtils.isEmpty(newFriends)){
-                                                boolean isHave = false;
-                                                for (int j = 0; j < newFriends.size() ; j++) {
-                                                    NewFriend newFriend = newFriends.get(j);
-                                                    if(message.getSenderUserId().equals(newFriend.getId())){
-                                                        isHave = true;
-                                                        break;
-                                                    }
-                                                }
-
-                                                if(!isHave){
-                                                   LitePalHelper.getInstance().saveNewFriend(textBean.getMsg(),message.getSenderUserId());
-                                              }
-                                          }else {
-                                                LitePalHelper.getInstance().saveNewFriend(textBean.getMsg(),message.getSenderUserId());
-                                            }
-                                    }
-                                });
-
-
-
-                        LitePalHelper.getInstance().saveNewFriend(
-                              textBean.getType(),
-                              message.getSenderUserId()
-                        );
+                        saveNewFriend(textBean.getMsg(), message.getSenderUserId());
+                        //查询数据库如果有重复的则不添加
+                        //防止漏了消息，暂时对消息不过滤处理
+//                disposable = Observable.create((ObservableOnSubscribe<List<NewFriend>>) emitter -> {
+//                    emitter.onNext(LitePalHelper.getInstance().queryNewFriend());
+//                    emitter.onComplete();
+//                }).subscribeOn(Schedulers.newThread())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(newFriends -> {
+//                            if (CommonUtils.isEmpty(newFriends)) {
+//                                boolean isHave = false;
+//                                for (int j = 0; j < newFriends.size(); j++) {
+//                                    NewFriend newFriend = newFriends.get(j);
+//                                    if (message.getSenderUserId().equals(newFriend.getId())) {
+//                                        isHave = true;
+//                                        break;
+//                                    }
+//                                }
+//                                //防止重复添加
+//                                if (!isHave) {
+//                                    saveNewFriend(textBean.getMsg(), message.getSenderUserId());
+//                                }
+//                            } else {
+//                                saveNewFriend(textBean.getMsg(), message.getSenderUserId());
+//                            }
+//                        });
                     }else if(textBean.getType().equals(CloudManager.TYPE_ARGEED_FRIEND)){
                         BmobManager.getInstance().addFriend(message.getSenderUserId(), new SaveListener<String>() {
                             @Override
                             public void done(String s, BmobException e) {
                                 if (e == null) {
+                                    pushSystem(message.getSenderUserId(), 0, 1, 0, "");
                                     EventManager.post(EventManager.FLAG_UPDATE_FRIEND_LIST);
                                 }
                             }
@@ -358,6 +357,7 @@ public class CloudService extends Service implements View.OnClickListener {
                         messageEvent.setImgUrl(url);
                         messageEvent.setUserId(message.getSenderUserId());
                         EventManager.post(messageEvent);
+                        pushSystem(message.getSenderUserId(), 1, 0, 0, getString(R.string.text_chat_record_img));
                     }
 
                 }else if (objectName.equals(CloudManager.MSG_LOCATION_NAME)) {
@@ -369,7 +369,7 @@ public class CloudService extends Service implements View.OnClickListener {
                 event.setUserId(message.getSenderUserId());
                 event.setAddress(locationMessage.getPoi());
                 EventManager.post(event);
-
+                    pushSystem(message.getSenderUserId(), 1, 0, 0, getString(R.string.text_chat_record_location));
             }
 
                 MessageEvent event = new MessageEvent(EventManager.FLAG_UPDATE_FRIEND_LIST);
@@ -592,7 +592,10 @@ public class CloudService extends Service implements View.OnClickListener {
 
     }
 
-
+    private void saveNewFriend(String msg, String senderUserId) {
+        pushSystem(senderUserId, 0, 0, 0, msg);
+        LitePalHelper.getInstance().saveNewFriend(msg, senderUserId);
+    }
 
 
 
@@ -668,6 +671,9 @@ public class CloudService extends Service implements View.OnClickListener {
             }
         });
     }
+
+    
+
 
     private void updateVideoview() {
             videoBigVideo.removeAllViews();
@@ -755,5 +761,81 @@ public class CloudService extends Service implements View.OnClickListener {
         }
 
         EventManager.unregister(this);
+    }
+
+
+    private void pushSystem(final String id, final int type, final int friendType, final int messageType, final String msgText) {
+        LogUtils.i("pushSystem");
+        BmobManager.getInstance().queryidFriend(id, new FindListener<IMUser>() {
+            @Override
+            public void done(List<IMUser> list, BmobException e) {
+                if (e == null) {
+                    if (CommonUtils.isEmpty(list)) {
+                        IMUser imUser = list.get(0);
+                        String text = "";
+                        if (type == 0) {
+                            switch (friendType) {
+                                case 0:
+                                    text = imUser.getNickName() + getString(R.string.text_server_noti_send_text);
+                                    break;
+                                case 1:
+                                    text = imUser.getNickName() + getString(R.string.text_server_noti_receiver_text);
+                                    break;
+                            }
+                        } else if (type == 1) {
+                            switch (messageType) {
+                                case 0:
+                                    text = msgText;
+                                    break;
+                                case 1:
+                                    text = getString(R.string.text_chat_record_img);
+                                    break;
+                                case 2:
+                                    text = getString(R.string.text_chat_record_location);
+                                    break;
+                            }
+                        }
+                        pushBitmap(type, friendType, imUser, imUser.getNickName(), text, imUser.getPhoto());
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 发送通知
+     *
+     * @param type       0：特殊消息 1：聊天消息
+     * @param friendType 0: 添加好友请求 1：同意好友请求
+     * @param imUser     用户对象
+     * @param title      标题
+     * @param text       内容
+     * @param url        头像Url
+     */
+    private void pushBitmap(final int type, final int friendType, final IMUser imUser, final String title, final String text, String url) {
+        LogUtils.i("pushBitmap");
+        GlideHelper.loadUrlToBitmap(this, url, new GlideHelper.OnGlideBitmapResultListener() {
+            @Override
+            public void onResourceReady(Bitmap resource) {
+                if (type == 0) {
+                    if (friendType == 0) {
+                        Intent intent = new Intent(CloudService.this, NewFriendActivity.class);
+                        PendingIntent pi = PendingIntent.getActivities(CloudService.this, 0, new Intent[]{intent}, PendingIntent.FLAG_CANCEL_CURRENT);
+                        NotificationHelper.getInstance().pushAddFriendNotification(imUser.getObjectId(), title, text, resource, pi);
+                    } else if (friendType == 1) {
+                        Intent intent = new Intent(CloudService.this, MainActivity.class);
+                        PendingIntent pi = PendingIntent.getActivities(CloudService.this, 0, new Intent[]{intent}, PendingIntent.FLAG_CANCEL_CURRENT);
+                        NotificationHelper.getInstance().pushArgeedFriendNotification(imUser.getObjectId(), title, text, resource, pi);
+                    }
+                } else if (type == 1) {
+                    Intent intent = new Intent(CloudService.this, ChatActivity.class);
+                    intent.putExtra(Constants.INTENT_USER_ID, imUser.getObjectId());
+                    intent.putExtra(Constants.INTENT_USER_NAME, imUser.getNickName());
+                    intent.putExtra(Constants.INTENT_USER_PHOTO, imUser.getPhoto());
+                    PendingIntent pi = PendingIntent.getActivities(CloudService.this, 0, new Intent[]{intent}, PendingIntent.FLAG_CANCEL_CURRENT);
+                    NotificationHelper.getInstance().pushMessageNotification(imUser.getObjectId(), title, text, resource, pi);
+                }
+            }
+        });
     }
 }
