@@ -50,6 +50,13 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
         GlideHelper.setimg(context,url,view);
         return this;
     }
+    public CommonViewHolder setImageUrl(Context mContext, int viewId, String url, int w, int h) {
+        ImageView iv = getView(viewId);
+        GlideHelper.loadSmollUrl(mContext, url, w, h, iv);
+        return this;
+    }
+
+
     public CommonViewHolder setImgFile(Context context,int viewid, File file){
         ImageView view = getView(viewid);
         GlideHelper.setimg(context,file,view);
@@ -75,6 +82,12 @@ public class CommonViewHolder extends RecyclerView.ViewHolder {
     public CommonViewHolder setBackGroundColor(int viewid, int resid){
         ImageView view = getView(viewid);
         view.setBackgroundColor(resid);
+        return this;
+    }
+
+    public CommonViewHolder setVisibility(int viewId, int visibility) {
+        TextView tv = getView(viewId);
+        tv.setVisibility(visibility);
         return this;
     }
 }

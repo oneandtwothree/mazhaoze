@@ -73,6 +73,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:ellipsize="marquee"
+                    android:textColor="#000"
                     android:gravity="center_vertical"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
@@ -80,6 +81,7 @@
 
                 <TextView
                     android:id="@+id/tv_time"
+                    android:textColor="#000"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time" />

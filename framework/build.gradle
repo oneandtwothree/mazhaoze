@@ -31,7 +31,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -76,4 +79,6 @@ dependencies {
     api 'com.tencent.bugly:nativecrashreport:3.0'
     api 'cn.yipianfengye.android:zxing-library:2.2'
     api 'cn.aigestudio.datepicker:DatePicker:2.2.0'
+    api "com.google.guava:guava:23.0"
+    api 'cn.jzvd:jiaozivideoplayer:7.0.5'
 }

@@ -28,7 +28,12 @@ public class ImagePreviewActivity extends BaseUiActivity implements View.OnClick
         intent.putExtra(Constants.INTENT_IMAGE_TYPE,isurl);
         context.startActivity(intent);
     }
-
+    public static void startActivity(Context mContext, boolean isUrl, String url) {
+        Intent intent = new Intent(mContext, ImagePreviewActivity.class);
+        intent.putExtra(Constants.INTENT_IMAGE_TYPE, isUrl);
+        intent.putExtra(Constants.INTENT_IMAGE_URL, url);
+        mContext.startActivity(intent);
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

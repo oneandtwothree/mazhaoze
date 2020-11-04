@@ -65,7 +65,7 @@
         <activity android:name=".Activity.QrCodeActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Activity.ShareImgActivity"/>
         <activity android:name=".Activity.MeInfoActivity" android:label="@string/text_me_item_title_1"/>
-
+        <activity android:name=".Activity.PushSquareActivity"/>
 
         <service android:name=".service.CloudService" android:exported="true"/>
 

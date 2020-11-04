@@ -121,8 +121,20 @@ public class BmobManager {
         bmobQuery.findObjects(listener);
     }
 
+    public void pushSquare(int mediaType, String text, String path, SaveListener<String> listener) {
+        SquareSet squareSet = new SquareSet();
+        squareSet.setUserId(getUser().getObjectId());
+        squareSet.setPushTime(System.currentTimeMillis());
 
-
+        squareSet.setText(text);
+        squareSet.setMediaUrl(path);
+        squareSet.setPushType(mediaType);
+        squareSet.save(listener);
+    }
+    public void queryAllSquare(FindListener<SquareSet> listener) {
+        BmobQuery<SquareSet> query = new BmobQuery<>();
+        query.findObjects(listener);
+    }
 
     public void addFriend(IMUser imUser, SaveListener<String> listener) {
         Friend friend = new Friend();
