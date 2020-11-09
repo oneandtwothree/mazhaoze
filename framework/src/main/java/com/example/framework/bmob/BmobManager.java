@@ -136,6 +136,8 @@ public class BmobManager {
         query.findObjects(listener);
     }
 
+
+
     public void addFriend(IMUser imUser, SaveListener<String> listener) {
         Friend friend = new Friend();
         friend.setUser(getUser());
@@ -177,6 +179,11 @@ public class BmobManager {
         set.setObjectId(id);
         set.delete(listener);
     }
+
+
+
+
+
 
     public IMUser getUser(){
         return BmobUser.getCurrentUser(IMUser.class);

@@ -35,6 +35,7 @@ public class CloudManager {
     public static final String MSG_TEXT_NAME = "RC:TxtMsg";
     public static final String MSG_IMAGE_NAME = "RC:ImgMsg";
     public static final String MSG_LOCATION_NAME = "RC:LBSMsg";
+    public static final String MSG_GROUP_NAME = "RC:GRPMsg";
 
 
     public static final String TYPE_TEXT = "TYPE_TEXT";
@@ -159,12 +160,18 @@ public class CloudManager {
 
 
     public void getConversationList(RongIMClient.ResultCallback<List<Conversation>> callback){
-        RongIMClient.getInstance().getConversationList(callback);
+        RongIMClient.getInstance().getConversationList(callback, Conversation.ConversationType.PRIVATE);
     }
 
     public void gethistoryMessages(String targerid, RongIMClient.ResultCallback<List<Message>> callback){
         RongIMClient.getInstance().getHistoryMessages(Conversation.ConversationType.PRIVATE,targerid,-1,1000,callback);
     }
+
+
+    public void getGroupList(RongIMClient.ResultCallback<List<Conversation>> callback){
+        RongIMClient.getInstance().getConversationList(callback, Conversation.ConversationType.GROUP);
+    }
+
 
 
     public void getRemotehistoryMessages(String targerid, RongIMClient.ResultCallback<List<Message>> callback){

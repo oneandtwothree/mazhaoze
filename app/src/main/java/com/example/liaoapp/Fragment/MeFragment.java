@@ -15,8 +15,10 @@ import com.example.framework.base.BaseFragment;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.IMUser;
 import com.example.framework.helper.GlideHelper;
+import com.example.liaoapp.Activity.GroupListActivity;
 import com.example.liaoapp.Activity.MeInfoActivity;
 import com.example.liaoapp.Activity.NewFriendActivity;
+import com.example.liaoapp.Activity.NewGroupActivity;
 import com.example.liaoapp.Activity.PrivateSetActivity;
 import com.example.liaoapp.Activity.ShareImgActivity;
 import com.example.liaoapp.R;
@@ -34,6 +36,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout llPrivateSet;
     private LinearLayout llShare;
     private LinearLayout llSetting;
+    private LinearLayout llNewGroup;
+    private LinearLayout llNewGroupList;
+
 
 
     @Nullable
@@ -54,6 +59,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         llPrivateSet = view.findViewById(R.id.ll_private_set);
         llShare = view.findViewById(R.id.ll_share);
         llSetting = view.findViewById(R.id.ll_setting);
+        llNewGroup = view.findViewById(R.id.ll_new_group);
+        llNewGroupList = view.findViewById(R.id.ll_new_group_list);
 
 
         llMeInfo.setOnClickListener(this);
@@ -61,6 +68,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         llPrivateSet.setOnClickListener(this);
         llShare.setOnClickListener(this);
         llSetting.setOnClickListener(this);
+        llNewGroup.setOnClickListener(this);
+        llNewGroupList.setOnClickListener(this);
 
         loadMeInfo();
 
@@ -91,6 +100,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.ll_setting:
                 break;
+            case R.id.ll_new_group:
+                startActivity(new Intent(getActivity(), NewGroupActivity.class));
+                break;
+            case R.id.ll_new_group_list:
+                startActivity(new Intent(getActivity(), GroupListActivity.class));
+                break;
+
         }
     }
 }

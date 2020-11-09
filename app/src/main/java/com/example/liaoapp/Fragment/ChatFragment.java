@@ -15,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.framework.base.BaseFragment;
 import com.example.liaoapp.Fragment.chat.AllFriendFragment;
 import com.example.liaoapp.Fragment.chat.CallRecordFragment;
+import com.example.liaoapp.Fragment.chat.ChatGroupFragment;
 import com.example.liaoapp.Fragment.chat.ChatRecordFragment;
 import com.example.liaoapp.R;
 import com.google.android.material.tabs.TabLayout;
@@ -32,6 +33,7 @@ public class ChatFragment extends BaseFragment {
     private ChatRecordFragment mChatRecordFragment;
     private CallRecordFragment mCallRecordFragment;
     private AllFriendFragment mAllFriendFragment;
+    private ChatGroupFragment mChatGroupFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,18 +43,21 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void initView(View view) {
-        //聊天记录 通话记录 全部好友
+        //聊天记录 通话记录 全部好友 群聊列表
         mTitle = new String[]{getString(R.string.text_chat_tab_title_1)
                 , getString(R.string.text_chat_tab_title_2)
-                , getString(R.string.text_chat_tab_title_3)};
+                , getString(R.string.text_chat_tab_title_3)
+                , getString(R.string.text_chat_tab_title_4)};
 
         mChatRecordFragment = new ChatRecordFragment();
         mCallRecordFragment = new CallRecordFragment();
         mAllFriendFragment = new AllFriendFragment();
+        mChatGroupFragment = new ChatGroupFragment();
 
         mFragmentList.add(mChatRecordFragment);
         mFragmentList.add(mCallRecordFragment);
         mFragmentList.add(mAllFriendFragment);
+        mFragmentList.add(mChatGroupFragment);
 
         mTabLayout = view.findViewById(R.id.mTabLayout);
         mViewPager = view.findViewById(R.id.mViewPager);
@@ -68,7 +73,7 @@ public class ChatFragment extends BaseFragment {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                defTabStyle(tab, 20);
+                defTabStyle(tab, 18);
             }
 
             @Override
@@ -83,7 +88,7 @@ public class ChatFragment extends BaseFragment {
         });
 
 
-        defTabStyle(mTabLayout.getTabAt(0), 20);
+        defTabStyle(mTabLayout.getTabAt(0), 18);
     }
 
 

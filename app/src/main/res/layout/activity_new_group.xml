@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/et_group_id"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_edit_bg"
+        android:cursorVisible="false"
+        android:hint="@string/text_user_group_id"
+        android:inputType="phone"
+        android:padding="5dp"
+        android:layout_margin="10dp"/>
+
+    <EditText
+        android:id="@+id/et_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/login_edit_bg"
+        android:cursorVisible="false"
+        android:hint="@string/text_user_group_name"
+        android:padding="5dp"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:layout_margin="10dp"
+        android:id="@+id/btn_chose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_btn_bg"
+        android:text="@string/text_user_chose_friend"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

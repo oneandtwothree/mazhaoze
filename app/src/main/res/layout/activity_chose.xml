@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ViewStub
+        android:visibility="gone"
+        android:id="@+id/item_empty_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_above="@id/chose_finish"
+        android:layout="@layout/layout_empty_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mFriendView"
+        android:layout_width="match_parent"
+        android:layout_above="@id/chose_finish"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:text="选择完成"
+        android:background="@drawable/login_btn_bg"
+        android:textColor="@android:color/white"
+        android:id="@+id/chose_finish"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>
