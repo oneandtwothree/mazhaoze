@@ -68,6 +68,41 @@ public class HttpManager {
             return "";
     }
 
+    public String postCloudGoup(HashMap<String,String> map){
+        String Timetamp = String.valueOf(System.currentTimeMillis() / 1000);
+        String Nonce = String.valueOf(Math.floor(Math.random() * 100000));
+
+        String Signature = SHA1.sha1(CloudManager.CLOUD_SECRET + Nonce + Timetamp);
+
+        FormBody.Builder builder = new FormBody.Builder();
+
+        for (String key:map.keySet()) {
+            if(key.equals("userIds")){
+                builder.add("userId",map.get(key));
+            }else {
+                builder.add(key,map.get(key));
+            }
+        }
+
+        RequestBody build = builder.build();
+        Request request = new Request.Builder()
+                .url(CloudManager.Group_URL)
+                .addHeader("Timestamp", Timetamp)
+                .addHeader("App-Key", CloudManager.CLOUD_KEY)
+                .addHeader("Nonce", Nonce)
+                .addHeader("Signature", Signature)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .post(build)
+                .build();
+
+
+        try {
+            return okHttpClient.newCall(request).execute().body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 
 }

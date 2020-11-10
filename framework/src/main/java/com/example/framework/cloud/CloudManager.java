@@ -29,6 +29,7 @@ public class CloudManager {
     private static volatile CloudManager cloudManager = null;
 
     public static final String TOKEN_URL = "https://api-cn.ronghub.com/user/getToken.json";
+    public static final String Group_URL = "https://api-cn.ronghub.com/group/create.json";
     public static final String CLOUD_KEY = "8luwapkv848bl";
     public static final String CLOUD_SECRET = "nk2hOm5FhSG";
 
@@ -101,6 +102,9 @@ public class CloudManager {
         return RongIMClient.getInstance().getCurrentConnectionStatus()
                 == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED;
     }
+
+
+
     //------------------------------------------------------------------------------------------------------------------------------------------
 
     public void setReceiveMessage(RongIMClient.OnReceiveMessageListener listener){

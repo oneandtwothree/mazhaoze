@@ -135,7 +135,28 @@ public class BmobManager {
         BmobQuery<SquareSet> query = new BmobQuery<>();
         query.findObjects(listener);
     }
+    public void queryMyGroup(String id, FindListener<Group> listener) {
+        BmobQuery<Group> query = new BmobQuery<>();
+        query.addWhereEqualTo("userid",id);
+        query.findObjects(listener);
+    }
 
+
+    public void addMyGroup(String userid,String groupid,String groupname,SaveListener<String> listener) {
+        Group group = new Group();
+        group.setGroupid(groupid);
+        group.setUserid(userid);
+        group.setGroupname(groupname);
+        group.save(listener);
+    }
+
+    public void delMyGroup(String userid,String groupid,String groupname,UpdateListener listener){
+        Group group = new Group();
+        group.setGroupid(groupid);
+        group.setUserid(userid);
+        group.setGroupname(groupname);
+        group.delete(listener);
+    }
 
 
     public void addFriend(IMUser imUser, SaveListener<String> listener) {

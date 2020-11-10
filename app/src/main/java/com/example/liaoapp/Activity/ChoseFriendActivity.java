@@ -1,5 +1,6 @@
 package com.example.liaoapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
@@ -17,16 +18,30 @@ import com.example.framework.base.BaseBackActivity;
 import com.example.framework.bmob.BmobManager;
 import com.example.framework.bmob.Friend;
 import com.example.framework.bmob.IMUser;
+import com.example.framework.cloud.CloudManager;
+import com.example.framework.event.EventManager;
+import com.example.framework.manager.HttpManager;
 import com.example.framework.utils.CommonUtils;
+import com.example.framework.utils.LogUtils;
+import com.example.liaoapp.MainActivity;
 import com.example.liaoapp.R;
 import com.example.liaoapp.model.AllFriendModel;
 import com.example.liaoapp.model.ChoseFriendModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class ChoseFriendActivity extends BaseBackActivity {
     private ViewStub itemEmptyView;
@@ -34,16 +49,27 @@ public class ChoseFriendActivity extends BaseBackActivity {
 
     private CommonAdapter<ChoseFriendModel> mallfriendadap;
     private List<ChoseFriendModel> modelList = new ArrayList<>();
-    private List<ChoseFriendModel> checkList = new ArrayList<>();
+    private List<ChoseFriendModel> checkList ;
+
+    private String groupid = null;
+    private String groupname = null;
 
     private Button choseFinish;
-
+    private Disposable subscribes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chose);
 
+        checkList = new ArrayList<>();
+
+        Intent intent = getIntent();
+        groupid = intent.getStringExtra("groupid");
+        groupname = intent.getStringExtra("groupname");
+
         initview();
+
+
 
 
     }
@@ -97,9 +123,59 @@ public class ChoseFriendActivity extends BaseBackActivity {
         choseFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ChoseFriendActivity.this, "选择完成", Toast.LENGTH_SHORT).show();
+               if(null != groupid){
+                   if(null != groupname){
+                       creategroup();
+                   }
+               }
             }
         });
+    }
+
+    private void creategroup() {
+        final HashMap<String,String> map = new HashMap<>();
+        map.put("userId",BmobManager.getInstance().getUser().getObjectId());
+        for (int i = 0; i <checkList.size() ; i++) {
+            ChoseFriendModel choseFriendModel = checkList.get(i);
+            String id = choseFriendModel.getId();
+            map.put("userIds",id);
+        }
+        map.put("groupId",groupid);
+        map.put("groupName",groupname);
+
+
+        subscribes = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                String s = HttpManager.getInstance().postCloudGoup(map);
+                emitter.onNext(s);
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String o) throws Exception {
+                        for (int i = 0; i <checkList.size() ; i++) {
+                            ChoseFriendModel choseFriendModel = checkList.get(i);
+                            String id = choseFriendModel.getId();
+                            BmobManager.getInstance().addMyGroup(id, groupid, groupname,new SaveListener<String>() {
+                                @Override
+                                public void done(String s, BmobException e) {
+                                }
+                            });
+                        }
+
+                        BmobManager.getInstance().addMyGroup(BmobManager.getInstance().getUser().getObjectId(), groupid, groupname,new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e == null) {
+                                    startActivity(new Intent(ChoseFriendActivity.this, MainActivity.class));
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
     private void queryMyFriends(){
@@ -145,5 +221,13 @@ public class ChoseFriendActivity extends BaseBackActivity {
             }
         });
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscribes != null) {
+            if (!subscribes.isDisposed()) {
+                subscribes.dispose();
+            }
+        }
+    }
 }
