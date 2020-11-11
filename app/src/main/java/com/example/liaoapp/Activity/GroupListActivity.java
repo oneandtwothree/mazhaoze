@@ -57,6 +57,14 @@ public class GroupListActivity extends BaseBackActivity{
             @Override
             public void onBindViewHolder(Group model, CommonViewHolder commonViewHolder, int type, int position) {
                 commonViewHolder.setText(R.id.tv_groupname,model.getGroupname());
+
+                commonViewHolder.getView(R.id.rl_itemview).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChatActivity.startActivity(GroupListActivity.this,model.getGroupid(),model.getGroupname());
+                    }
+                });
+
             }
 
             @Override

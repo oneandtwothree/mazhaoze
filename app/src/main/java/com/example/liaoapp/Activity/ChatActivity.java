@@ -99,6 +99,15 @@ public class ChatActivity extends BaseBackActivity implements View.OnClickListen
     }
 
 
+
+    public static void startActivity(Context context,String groupid,String groupname){
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(Constants.INTENT_GROUP_ID,groupid);
+        intent.putExtra(Constants.INTENT_GROUP_NAME,groupname);
+        context.startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

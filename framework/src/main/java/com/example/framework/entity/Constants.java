@@ -18,6 +18,9 @@ public class Constants {
     public static final String INTENT_USER_NAME = "intent_user_name";
     public static final String INTENT_USER_PHOTO = "intent_user_photo";
 
+    public static final String INTENT_GROUP_ID = "intent_group_id";
+    public static final String INTENT_GROUP_NAME = "intent_group_name";
+
     public static final String INTENT_IMAGE_TYPE = "intent_image_type";
     public static final String INTENT_IMAGE_URL = "intent_image_url";
 
